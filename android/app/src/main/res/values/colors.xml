@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Oyunun zemin rengi. Açılış ekranı bununla boyanıyor ki uygulama
+         açılırken beyaz bir parlama olmasın. -->
+    <color name="launch_background">#1C1836</color>
+    <!-- Uyarlanabilir ikonun arka katmanı. -->
+    <color name="iconBackground">#241E44</color>
+</resources>

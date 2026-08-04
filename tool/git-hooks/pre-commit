@@ -1,0 +1,69 @@
+#!/bin/bash
+# Gizli bilgilerin yanlışlıkla commit edilmesini engelleyen kanca.
+#
+# GitHub'ın secret scanning özelliği private repolarda ücretli olduğu için
+# koruma burada, commit anında yapılıyor. Kurmak için bir kez:
+#   git config core.hooksPath tool/git-hooks
+#
+# Bilerek geçmek gerekirse: git commit --no-verify
+
+set -uo pipefail
+
+engellendi=0
+
+hata() {
+  printf '\033[31m✗ %s\033[0m\n' "$1" >&2
+  engellendi=1
+}
+
+# Sadece bu commit'te eklenen/değişen dosyalara bakıyoruz.
+dosyalar=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$dosyalar" ] && exit 0
+
+# --- 1) Dosya adına göre yasaklılar --------------------------------------
+yasak_ad='(\.jks|\.keystore|\.p12|\.pfx|\.pem|\.mobileprovision)$|(^|/)(key\.properties|google-services\.json|GoogleService-Info\.plist|id_rsa|id_ed25519)$|(^|/)\.env'
+
+while IFS= read -r dosya; do
+  if printf '%s' "$dosya" | grep -qE "$yasak_ad"; then
+    hata "Hassas dosya commit edilemez: $dosya"
+  fi
+done <<< "$dosyalar"
+
+# --- 2) İçerikte gizli bilgi deseni ---------------------------------------
+# Anahtar biçimleri: özel anahtar blokları, imzalama şifreleri, sağlayıcı
+# token'ları (Google, GitHub, OpenAI, AWS, Slack).
+icerik_deseni='BEGIN (RSA |EC |OPENSSH |PGP )?PRIVATE KEY|(storePassword|keyPassword)[[:space:]]*=[[:space:]]*[^[:space:]]|AIza[0-9A-Za-z_-]{35}|gh[pousr]_[0-9A-Za-z]{36}|sk-[A-Za-z0-9]{32,}|AKIA[0-9A-Z]{16}|xox[baprs]-[0-9A-Za-z-]{10,}'
+
+while IFS= read -r dosya; do
+  # İkili dosyaları ve bu kancanın kendisini atla.
+  [ "$dosya" = "tool/git-hooks/pre-commit" ] && continue
+  git show ":$dosya" 2>/dev/null | head -c 2000000 | grep -qI . || continue
+
+  # Değeri bir dosyadan ya da ortamdan okuyan satırlar (ör.
+  # keystoreProperties.getProperty) gizli bilgi değil, yalnızca ona giden yol.
+  eslesme=$(
+    git show ":$dosya" 2>/dev/null |
+      grep -vE 'getProperty\(|System\.getenv|fromEnvironment' |
+      grep -nEo "$icerik_deseni" | head -1
+  )
+  if [ -n "$eslesme" ]; then
+    hata "Gizli bilgi olabilir → $dosya (satır ${eslesme%%:*})"
+  fi
+done <<< "$dosyalar"
+
+if [ "$engellendi" -ne 0 ]; then
+  cat >&2 <<'MESAJ'
+
+Commit durduruldu. Bu dosyalar depoya girerse geri almak zordur —
+GitHub'a gittikten sonra geçmişten silinse bile kopyaları kalabilir.
+
+Yapılacaklar:
+  • Dosyayı sahneden çıkar:  git restore --staged <dosya>
+  • Kalıcı olarak yok say:   .gitignore'a ekle
+  • Yanlış alarm olduğuna eminsen: git commit --no-verify
+
+MESAJ
+  exit 1
+fi
+
+exit 0
