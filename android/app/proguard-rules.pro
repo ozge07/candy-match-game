@@ -6,3 +6,4 @@
 
 # Küçültme sırasında kaybolmaması gereken sınıflar.
 -keep class io.flutter.** { *; }
+-keep class com.google.android.gms.ads.** { *; }

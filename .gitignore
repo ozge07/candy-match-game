@@ -49,6 +49,8 @@ app.*.map.json
 
 # --- Yayın imzası (depoya asla girmemeli) ---
 # Keystore kaybedilirse yayınlanmış uygulama bir daha güncellenemez.
+android/admob.properties
+tool/build_release.sh
 android/key.properties
 **/*.jks
 **/*.keystore

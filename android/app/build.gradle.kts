@@ -6,6 +6,20 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// AdMob uygulama kimliği. Gerçek değer android/admob.properties dosyasında
+// tutuluyor ve depoya girmiyor (bkz. admob.properties.example). Dosya yoksa
+// Google'ın test kimliğine düşüyoruz; böylece temiz bir klon da derlenebiliyor
+// ve yanlışlıkla gerçek reklam gösterilmiyor.
+val admobTestAppId = "ca-app-pub-3940256099942544~3347511713"
+val admobProperties = Properties().apply {
+    val file = rootProject.file("admob.properties")
+    if (file.exists()) {
+        file.inputStream().use { load(it) }
+    }
+}
+val resolvedAdmobAppId: String =
+    admobProperties.getProperty("admobAppId") ?: admobTestAppId
+
 // Yayın imzası. Gerçek anahtar bilgileri android/key.properties içinde ve
 // depoya girmiyor. Dosya yoksa release yine derlenebilsin diye debug
 // anahtarlarına düşüyoruz — ama o paket Play Store'a yüklenemez.
@@ -36,6 +50,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        // AndroidManifest.xml içindeki ${'$'}{admobAppId} bununla doluyor.
+        manifestPlaceholders["admobAppId"] = resolvedAdmobAppId
     }
 
     signingConfigs {

@@ -12,7 +12,8 @@ class MenuButton extends StatelessWidget {
 
   final String label;
   final IconData icon;
-  final VoidCallback onPressed;
+  /// `null` ise düğme devre dışı görünüyor (ör. reklam açılırken).
+  final VoidCallback? onPressed;
 
   /// Birincil eylem dolu, ikincil eylem sadece çerçeveli.
   final bool filled;

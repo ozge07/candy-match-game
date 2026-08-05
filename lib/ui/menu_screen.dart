@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../game/ads_controller.dart';
 import '../game/audio_controller.dart';
 import '../game/game_save_store.dart';
 import '../game/high_score_store.dart';
@@ -14,6 +15,7 @@ import 'menu_button.dart';
 class MenuScreen extends StatefulWidget {
   const MenuScreen({
     required this.audio,
+    required this.ads,
     required this.highScores,
     required this.saves,
     required this.tips,
@@ -21,6 +23,9 @@ class MenuScreen extends StatefulWidget {
   });
 
   final AudioController audio;
+
+  /// Ödüllü reklam kontrolcüsü; oyun ekranına aktarılıyor.
+  final AdsController ads;
   final HighScoreStore highScores;
   final GameSaveStore saves;
   final TipStore tips;
@@ -47,6 +52,7 @@ class _MenuScreenState extends State<MenuScreen>
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => GamePage(
+          ads: widget.ads,
           audio: widget.audio,
           highScores: widget.highScores,
           saves: widget.saves,

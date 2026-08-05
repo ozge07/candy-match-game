@@ -1,16 +1,18 @@
 # Candy Match — Gizlilik Politikası
 
-**Son güncelleme:** 4 Ağustos 2026
+**Son güncelleme:** 5 Ağustos 2026
 **Geliştirici:** ozge
 **İletişim:** bluelabsgames@gmail.com
 
 ## Özet
 
-Candy Match **hiçbir kişisel veri toplamaz, saklamaz veya paylaşmaz.**
+Oyunun kendisi sizden hiçbir bilgi istemez ve hiçbir bilgi toplamaz. Hesap
+açmanız gerekmez, isim ya da e-posta sorulmaz, analiz (analytics) aracı
+kullanılmaz.
 
-Oyun tamamen çevrimdışı çalışır. Hesap açmanız gerekmez, reklam gösterilmez,
-analiz (analytics) aracı kullanılmaz ve hiçbir veri cihazınızdan dışarı
-çıkmaz.
+Oyunda **isteğe bağlı ödüllü reklamlar** vardır. Reklamları Google AdMob
+gösterir ve AdMob kendi verilerini toplar; aşağıdaki bölüm bunu açıklar.
+Reklam izlemediğiniz sürece oyun oynanırken veri gönderilmez.
 
 ## Toplanan veriler
 
@@ -45,13 +47,21 @@ Bunlar kişisel veri değildir ve sizi tanımlamaz.
 
 ## İzinler
 
-Uygulama hiçbir Android izni istemez. Yayınlanan sürümde **internet izni bile
-yoktur**; bu nedenle uygulamanın veri göndermesi teknik olarak mümkün değildir.
+Uygulamanın istediği izinlerin tamamı reklam SDK'sından gelir:
 
-## Reklam ve analiz
+| İzin | Ne için |
+|---|---|
+| `INTERNET`, `ACCESS_NETWORK_STATE` | Reklamı indirmek ve bağlantıyı kontrol etmek |
+| `AD_ID`, `ACCESS_ADSERVICES_*` | Reklam kimliği ve Android'in reklam ölçüm API'leri |
+| `WAKE_LOCK`, `FOREGROUND_SERVICE` | Reklam videosu oynarken ekranın kapanmaması |
 
-Uygulamada reklam ağı, analiz aracı veya takip teknolojisi (SDK) yoktur.
-Üçüncü taraflarla veri paylaşımı yoktur.
+Oyunun kendisi hiçbir izin istemez: kameraya, mikrofona, rehbere, konuma ya da
+dosyalarınıza erişmez.
+
+## Analiz
+
+Uygulamada analiz (analytics) aracı ya da takip teknolojisi yoktur. Üçüncü
+taraflarla tek veri paylaşımı yukarıda anlatılan reklam SDK'sı üzerindendir.
 
 ## Üçüncü taraf bileşenler
 

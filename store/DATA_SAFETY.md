@@ -1,45 +1,65 @@
 # Play Console — Data Safety formu için cevaplar
 
-Candy Match'in **release** derlemesi incelenerek çıkarıldı.
+Candy Match'in **release** derlemesi incelenerek çıkarıldı. Formu doldururken
+bu tabloyu kullan.
 
 ## Özet
 
-Uygulama **hiçbir veri toplamıyor ve paylaşmıyor**. Reklam SDK'sı,
-analitik, giriş sistemi ya da ağ erişimi yok. Release paketinin manifest'inde
-Android'in normal izinlerinden **hiçbiri** bulunmuyor.
+Uygulamanın kendisi **hiçbir veri toplamıyor**. Toplanan her şey Google AdMob
+reklam SDK'sından geliyor. Google, AdMob'u kullanan geliştiricinin bu verileri
+"toplanıyor" olarak beyan etmesini istiyor.
 
 ## Form cevapları
 
-**Uygulamanız kullanıcı verisi topluyor veya paylaşıyor mu?** → **Hayır**
+**Uygulamanız kullanıcı verisi topluyor veya paylaşıyor mu?** → **Evet**
+(reklam SDK'sı nedeniyle)
 
-Bu cevabı verdiğinde form biter; veri türü tablosu açılmaz.
+**Verileriniz aktarım sırasında şifreleniyor mu?** → **Evet** (AdMob HTTPS
+kullanıyor)
 
-**Uygulamanız reklam kimliği kullanıyor mu?** → **Hayır**
+**Kullanıcılar verilerinin silinmesini isteyebiliyor mu?** → **Hayır**
+(uygulamanın kendi topladığı veri yok; reklam kimliği cihaz ayarlarından
+sıfırlanabiliyor)
 
-## Cihazda kalan veriler
+### Toplanan veri türleri
 
-Şunlar yalnızca telefonda saklanıyor, hiçbir yere gönderilmiyor. Google bunları
-"toplama" saymıyor çünkü cihazdan çıkmıyorlar:
+| Kategori | Veri türü | Toplanıyor | Paylaşılıyor | Amaç | Zorunlu mu |
+|---|---|---|---|---|---|
+| Konum | Yaklaşık konum | Evet | Evet | Reklamcılık | İsteğe bağlı |
+| Uygulama etkinliği | Uygulama içi etkileşimler | Evet | Evet | Reklamcılık, analiz | İsteğe bağlı |
+| Cihaz veya diğer kimlikler | Cihaz/diğer kimlikler (reklam kimliği) | Evet | Evet | Reklamcılık | İsteğe bağlı |
 
-- En yüksek puan
-- Yarım kalan oyunun durumu ("Devam et" için)
-- Bilgi ipucunun daha önce gösterilip gösterilmediği
-- Sesin açık/kapalı olması
+"Paylaşılıyor" evet, çünkü veri üçüncü tarafa (Google) gidiyor.
 
-Uygulama silinince bunlar da silinir.
+### Toplanmayanlar
+
+Kişisel bilgi (isim, e-posta, telefon), finansal bilgi, sağlık bilgisi,
+mesajlar, fotoğraf/video, ses, kişiler, takvim, dosyalar, arama geçmişi,
+SMS — **hiçbiri toplanmıyor**.
+
+## Reklam kimliği beyanı
+
+Play Console ayrı olarak "Uygulamanız reklam kimliği kullanıyor mu?" diye
+soruyor → **Evet**, reklamcılık amacıyla.
 
 ## Release izinleri (doğrulanmış)
 
-Birleştirilmiş release manifest'inde yalnızca Android'in kendi ürettiği
-şu iç izin var; kullanıcıya sorulmaz ve bir yetki vermez:
+Aşağıdakiler birleştirilmiş release manifest'inden okundu. Tamamı reklam
+SDK'sından geliyor; oyunun kendisi hiçbir izin istemiyor.
 
 ```
-com.ozge.candy_match.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+android.permission.INTERNET
+android.permission.ACCESS_NETWORK_STATE
+android.permission.WAKE_LOCK
+android.permission.FOREGROUND_SERVICE
+com.google.android.gms.permission.AD_ID
+android.permission.ACCESS_ADSERVICES_AD_ID
+android.permission.ACCESS_ADSERVICES_ATTRIBUTION
+android.permission.ACCESS_ADSERVICES_TOPICS
 ```
-
-İnternet izni bile yok — oyun tamamen çevrimdışı.
 
 ## Gizlilik politikası
 
 Play Console gizlilik politikasının **herkese açık bir URL'de** yayınlanmasını
-şart koşuyor. `PRIVACY_POLICY.md` hazır ama bir yerde yayınlanması gerekiyor.
+şart koşuyor. `PRIVACY_POLICY.md` hazır ama bir yerde yayınlanması gerekiyor —
+GitHub Pages, Google Sites ya da benzeri ücretsiz bir yer yeterli.

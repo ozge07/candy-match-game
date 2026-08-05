@@ -1,3 +1,4 @@
+import 'package:candy_match/game/ads_controller.dart';
 import 'package:candy_match/game/audio_controller.dart';
 import 'package:candy_match/game/tip_store.dart';
 import 'package:candy_match/ui/game_page.dart';
@@ -7,7 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> pumpGame(WidgetTester tester, TipStore tips) async {
   await tester.pumpWidget(
-    MaterialApp(home: GamePage(audio: AudioController(), tips: tips)),
+    MaterialApp(home: GamePage(
+        ads: AdsController.disabled(),audio: AudioController(), tips: tips)),
   );
   await tester.pump();
   await tester.pump();

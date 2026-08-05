@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../game/ads_controller.dart';
 import '../game/candy_game.dart';
 import 'menu_button.dart';
 
@@ -11,11 +12,15 @@ import 'menu_button.dart';
 class GameOverOverlay extends StatefulWidget {
   const GameOverOverlay({
     required this.game,
+    required this.ads,
     required this.onExitToMenu,
     super.key,
   });
 
   final CandyGame game;
+
+  /// Ödüllü reklam kontrolcüsü; "devam et" buna bakıyor.
+  final AdsController ads;
 
   /// Menüye dönüş oyun ekranının sorumluluğunda.
   final VoidCallback onExitToMenu;
@@ -59,9 +64,10 @@ class _GameOverOverlayState extends State<GameOverOverlay>
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: _Card(
-              game: widget.game,
-              onExitToMenu: widget.onExitToMenu,
-            ),
+                game: widget.game,
+                ads: widget.ads,
+                onExitToMenu: widget.onExitToMenu,
+              ),
             ),
           ),
         ),
@@ -70,11 +76,37 @@ class _GameOverOverlayState extends State<GameOverOverlay>
   }
 }
 
-class _Card extends StatelessWidget {
-  const _Card({required this.game, required this.onExitToMenu});
+class _Card extends StatefulWidget {
+  const _Card({
+    required this.game,
+    required this.ads,
+    required this.onExitToMenu,
+  });
 
   final CandyGame game;
+  final AdsController ads;
   final VoidCallback onExitToMenu;
+
+  @override
+  State<_Card> createState() => _CardState();
+}
+
+class _CardState extends State<_Card> {
+  bool _watching = false;
+
+  CandyGame get game => widget.game;
+
+  Future<void> _watchAdToContinue() async {
+    setState(() => _watching = true);
+    final earned = await widget.ads.showRewarded();
+    if (!mounted) {
+      return;
+    }
+    setState(() => _watching = false);
+    if (earned) {
+      game.continueAfterAd();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,10 +154,38 @@ class _Card extends StatelessWidget {
           const SizedBox(height: 26),
           _ScorePanel(game: game),
           const SizedBox(height: 28),
+          // Devam etme yalnızca bu turda kullanılmadıysa ve gösterime hazır
+          // bir reklam varsa teklif ediliyor.
+          ValueListenableBuilder<bool>(
+            valueListenable: widget.ads.isReady,
+            builder: (context, adReady, _) {
+              if (!adReady || !game.canContinue) {
+                return const SizedBox.shrink();
+              }
+              return Column(
+                children: [
+                  MenuButton(
+                    label: _watching ? 'REKLAM AÇILIYOR…' : 'DEVAM ET',
+                    icon: Icons.play_circle_fill_rounded,
+                    onPressed: _watching ? null : _watchAdToContinue,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'reklam izle, tahta karışsın',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white.withValues(alpha: 0.5),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                ],
+              );
+            },
+          ),
           MenuButton(
             label: 'MENÜYE DÖN',
             icon: Icons.home_rounded,
-            onPressed: onExitToMenu,
+            onPressed: widget.onExitToMenu,
           ),
           const SizedBox(height: 12),
           MenuButton(

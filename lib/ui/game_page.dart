@@ -1,6 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
+import '../game/ads_controller.dart';
 import '../game/audio_controller.dart';
 import '../game/candy_game.dart';
 import '../game/game_save_store.dart';
@@ -15,6 +16,7 @@ import 'level_bar.dart';
 class GamePage extends StatefulWidget {
   const GamePage({
     required this.audio,
+    required this.ads,
     this.highScores,
     this.saves,
     this.tips,
@@ -23,6 +25,9 @@ class GamePage extends StatefulWidget {
   });
 
   final AudioController audio;
+
+  /// Ödüllü reklam kontrolcüsü; oyun sonu kartındaki "devam et" buna bakıyor.
+  final AdsController ads;
   final HighScoreStore? highScores;
   final GameSaveStore? saves;
   final TipStore? tips;
@@ -84,7 +89,11 @@ class _GamePageState extends State<GamePage> {
               HudOverlay(game: game, onExitToMenu: _exitToMenu),
           levelOverlay: (context, game) => LevelBar(game: game),
           gameOverOverlay: (context, game) =>
-              GameOverOverlay(game: game, onExitToMenu: _exitToMenu),
+              GameOverOverlay(
+                game: game,
+                ads: widget.ads,
+                onExitToMenu: _exitToMenu,
+              ),
         },
         initialActiveOverlays: const [hudOverlay, levelOverlay],
       ),

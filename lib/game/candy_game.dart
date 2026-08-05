@@ -366,6 +366,23 @@ class CandyGame extends FlameGame {
     );
   }
 
+  /// Reklamla devam etme tur başına bir kez.
+  bool _usedContinue = false;
+
+  bool get canContinue => !_usedContinue;
+
+  /// Reklam izlendi: tahta karıştırılıp oyun kaldığı yerden sürüyor.
+  void continueAfterAd() {
+    if (!canContinue || !isOver.value) {
+      return;
+    }
+    _usedContinue = true;
+    isOver.value = false;
+    _board?.reshuffleForContinue();
+    // Oyun sürdüğü için kayıt geri geliyor: menüdeki "Devam Et" tekrar çıksın.
+    saveProgress();
+  }
+
   /// Hamle kalmadı: skoru dondurup oyun sonu kartını açıyoruz.
   void endGame() {
     if (isOver.value) {

@@ -1,3 +1,4 @@
+import 'package:candy_match/game/ads_controller.dart';
 import 'package:candy_match/game/audio_controller.dart';
 import 'package:candy_match/game/game_save_store.dart';
 import 'package:candy_match/game/high_score_store.dart';
@@ -14,6 +15,7 @@ void main() {
     await tester.pumpWidget(
       CandyMatchApp(
         audio: AudioController(),
+        ads: AdsController.disabled(),
         highScores: HighScoreStore(),
         saves: GameSaveStore(),
         tips: TipStore(),

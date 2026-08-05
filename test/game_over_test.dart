@@ -1,3 +1,4 @@
+import 'package:candy_match/game/ads_controller.dart';
 import 'package:candy_match/game/audio_controller.dart';
 import 'package:candy_match/game/candy_game.dart';
 import 'package:candy_match/game/high_score_store.dart';
@@ -11,7 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<CandyGame> pumpGame(WidgetTester tester, {HighScoreStore? store}) async {
   await tester.pumpWidget(
     MaterialApp(
-      home: GamePage(audio: AudioController(), highScores: store),
+      home: GamePage(
+        ads: AdsController.disabled(),audio: AudioController(), highScores: store),
     ),
   );
   await tester.pump();

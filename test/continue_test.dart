@@ -1,3 +1,4 @@
+import 'package:candy_match/game/ads_controller.dart';
 import 'package:candy_match/game/audio_controller.dart';
 import 'package:candy_match/game/board.dart';
 import 'package:candy_match/game/candy.dart';
@@ -20,6 +21,7 @@ Future<CandyGame> pumpGame(
   await tester.pumpWidget(
     MaterialApp(
       home: GamePage(
+        ads: AdsController.disabled(),
         audio: AudioController(),
         saves: saves,
         resume: resume,
@@ -159,6 +161,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: MenuScreen(
+        ads: AdsController.disabled(),
             audio: AudioController(),
             highScores: HighScoreStore(),
             saves: saves,
@@ -190,6 +193,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: MenuScreen(
+        ads: AdsController.disabled(),
             audio: AudioController(),
             highScores: HighScoreStore(),
             saves: saves,

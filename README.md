@@ -240,6 +240,32 @@ geçmek için:
   Bkz. https://docs.flutter.dev/deployment/android
 - Uygulama adı `android/app/src/main/AndroidManifest.xml` içindeki `android:label`.
 
+## Reklamlar
+
+Hamle kalmadığında oyun sonu kartında **Devam Et** çıkıyor: ödüllü reklamı
+sonuna kadar izleyen oyuncunun tahtası karıştırılıp oyun kaldığı yerden
+sürüyor. Şekerler silinmiyor, yalnızca türleri yeniden dağıtılıyor — biriken
+özel şekerler duruyor. Tur başına bir kez.
+
+**Depoda hiçbir gerçek AdMob kimliği yok**; kaynakta yalnızca Google'ın test
+birimleri var. Gerçek değerleri koymak için:
+
+| Kimlik | Nereden | Şablon |
+|---|---|---|
+| Uygulama kimliği (`~`) | `android/admob.properties` | `admob.properties.example` |
+| Ödüllü birim (`/`) | derlemedeki `--dart-define=ADMOB_REWARDED_ANDROID=…` | `tool/build_release.example.sh` |
+
+`flutter run` ile geliştirirken **her zaman** test reklamı çıkıyor; gerçek
+kimlik verilmiş olsa bile. Kendi gerçek reklamına tıklamak geçersiz trafik
+sayılır ve AdMob hesabının kapatılmasına yol açar.
+
+Yayın paketi gerçek kimliklerle:
+
+```bash
+./tool/build_release.sh          # app bundle
+./tool/build_release.sh apk      # apk
+```
+
 ## Depoda olmayanlar
 
 Aşağıdaki dosyalar `.gitignore` ile hariç tutuldu:
@@ -249,6 +275,10 @@ Aşağıdaki dosyalar `.gitignore` ile hariç tutuldu:
   ipucu ve oyun sonu kontrolü
 - `test/bomb_test.dart`, `test/rainbow_swap_test.dart`, `test/hint_test.dart` —
   yukarıdaki kuralların testleri
+
+Ayrıca gerçek AdMob kimlikleri (`android/admob.properties`,
+`tool/build_release.sh`) ve yayın anahtarı (`android/key.properties`) da
+depoya girmiyor.
 
 Bu yüzden `flutter run` ve `flutter test` bu depo tek başına klonlandığında
 çalışmaz. Depo arayüzü, şeker çizimini, efektleri, ses/kayıt katmanlarını ve

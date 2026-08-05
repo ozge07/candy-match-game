@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../game/ads_controller.dart';
 import '../game/audio_controller.dart';
 import '../game/game_save_store.dart';
 import '../game/high_score_store.dart';
@@ -14,6 +15,7 @@ import 'menu_screen.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({
     required this.audio,
+    required this.ads,
     required this.highScores,
     required this.saves,
     required this.tips,
@@ -21,6 +23,9 @@ class SplashScreen extends StatefulWidget {
   });
 
   final AudioController audio;
+
+  /// Ödüllü reklam kontrolcüsü; menüye ve oyuna aktarılıyor.
+  final AdsController ads;
   final HighScoreStore highScores;
   final GameSaveStore saves;
   final TipStore tips;
@@ -61,6 +66,7 @@ class _SplashScreenState extends State<SplashScreen>
         transitionDuration: const Duration(milliseconds: 450),
         pageBuilder: (_, _, _) => MenuScreen(
           audio: widget.audio,
+          ads: widget.ads,
           highScores: widget.highScores,
           saves: widget.saves,
           tips: widget.tips,
