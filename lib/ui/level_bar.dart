@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../i18n/strings.dart';
+
 import '../game/candy_game.dart';
 import '../game/level_theme.dart';
 
@@ -134,7 +136,7 @@ class _TipCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Seviye atladıkça zorlaşır',
+                        Strings.of(context).harderEachLevel,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
@@ -143,9 +145,7 @@ class _TipCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Her ${CandyGame.pointsPerLevel} puanda seviye '
-                        'atlarsın; yeni şeker türleri eklenir, eşleşme '
-                        'bulmak zorlaşır.',
+                        Strings.of(context).levelTip(CandyGame.pointsPerLevel),
                         style: TextStyle(
                           fontSize: 12.5,
                           height: 1.35,
@@ -199,7 +199,7 @@ class _Progress extends StatelessWidget {
                   _InfoButton(onPressed: onInfo),
                   const Spacer(),
                   Text(
-                    'sonraki seviyeye $remaining',
+                    Strings.of(context).nextLevel(remaining),
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -296,7 +296,7 @@ class _LevelChip extends StatelessWidget {
         border: Border.all(color: accent.withValues(alpha: 0.55), width: 1.5),
       ),
       child: Text(
-        'SEVİYE $level',
+        Strings.of(context).level(level),
         style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w900,

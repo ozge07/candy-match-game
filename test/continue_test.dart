@@ -11,6 +11,8 @@ import 'package:candy_match/ui/menu_screen.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:candy_match/i18n/app_language.dart';
+import 'package:candy_match/i18n/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<CandyGame> pumpGame(
@@ -48,7 +50,12 @@ Future<void> teardown(WidgetTester tester) async {
 }
 
 void main() {
-  setUp(() => SharedPreferences.setMockInitialValues({}));
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+    // Testler Türkçe metinlere bakıyor; cihaz dilinden bağımsız olsun.
+    LanguageStore.debugOverride = AppLanguage.tr;
+  });
+  tearDown(() => LanguageStore.debugOverride = null);
 
   group('kayıt deposu', () {
     test('boşken kayıt yok', () async {
@@ -160,12 +167,15 @@ void main() {
       final saves = GameSaveStore();
       await tester.pumpWidget(
         MaterialApp(
-          home: MenuScreen(
+          home: LanguageScope(
+            store: LanguageStore(),
+            child: MenuScreen(
         ads: AdsController.disabled(),
             audio: AudioController(),
             highScores: HighScoreStore(),
             saves: saves,
-            tips: TipStore()..seen.value = true,
+              tips: TipStore()..seen.value = true,
+            ),
           ),
         ),
       );
@@ -192,12 +202,15 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: MenuScreen(
+          home: LanguageScope(
+            store: LanguageStore(),
+            child: MenuScreen(
         ads: AdsController.disabled(),
             audio: AudioController(),
             highScores: HighScoreStore(),
             saves: saves,
-            tips: TipStore()..seen.value = true,
+              tips: TipStore()..seen.value = true,
+            ),
           ),
         ),
       );

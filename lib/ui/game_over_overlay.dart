@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../i18n/strings.dart';
 import 'package:flutter/services.dart';
 
 import '../game/ads_controller.dart';
@@ -110,6 +112,7 @@ class _CardState extends State<_Card> {
 
   @override
   Widget build(BuildContext context) {
+    final metin = Strings.of(context);
     return Container(
       padding: const EdgeInsets.fromLTRB(28, 34, 28, 28),
       decoration: BoxDecoration(
@@ -128,7 +131,7 @@ class _CardState extends State<_Card> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'OYUN BİTTİ',
+            metin.gameOver,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 34,
@@ -145,7 +148,7 @@ class _CardState extends State<_Card> {
           ),
           const SizedBox(height: 6),
           Text(
-            'Yapılacak hamle kalmadı',
+            metin.noMovesLeft,
             style: TextStyle(
               fontSize: 14,
               color: Colors.white.withValues(alpha: 0.6),
@@ -165,13 +168,13 @@ class _CardState extends State<_Card> {
               return Column(
                 children: [
                   MenuButton(
-                    label: _watching ? 'REKLAM AÇILIYOR…' : 'DEVAM ET',
+                    label: _watching ? metin.watchingAd : metin.continueGame,
                     icon: Icons.play_circle_fill_rounded,
                     onPressed: _watching ? null : _watchAdToContinue,
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'reklam izle, tahta karışsın',
+                    metin.continueSubtitle,
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.white.withValues(alpha: 0.5),
@@ -183,13 +186,13 @@ class _CardState extends State<_Card> {
             },
           ),
           MenuButton(
-            label: 'MENÜYE DÖN',
+            label: metin.backToMenuButton,
             icon: Icons.home_rounded,
             onPressed: widget.onExitToMenu,
           ),
           const SizedBox(height: 12),
           MenuButton(
-            label: 'ÇIKIŞ',
+            label: metin.exit,
             icon: Icons.close_rounded,
             filled: false,
             onPressed: SystemNavigator.pop,
@@ -207,6 +210,7 @@ class _ScorePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final metin = Strings.of(context);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -217,7 +221,7 @@ class _ScorePanel extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'SKORUN',
+            metin.yourScore,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w800,
@@ -243,7 +247,7 @@ class _ScorePanel extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '${game.moves.value} hamle',
+            metin.moves(game.moves.value),
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
@@ -267,6 +271,7 @@ class _BestLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final metin = Strings.of(context);
     final best = game.highScores.best.value;
     final isRecord = game.score.value >= best && game.score.value > 0;
 
@@ -282,7 +287,7 @@ class _BestLine extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Text(
-          isRecord ? 'YENİ REKOR!' : 'Rekor: $best',
+          isRecord ? metin.newRecord : 'Rekor: $best',
           style: TextStyle(
             fontSize: 15,
             fontWeight: isRecord ? FontWeight.w900 : FontWeight.w600,

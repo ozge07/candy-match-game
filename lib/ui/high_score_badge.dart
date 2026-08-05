@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../i18n/strings.dart';
+
 import '../game/high_score_store.dart';
 
 /// Menüdeki rekor rozeti: kupa ikonu, nefes alan bir hale ve skor.
@@ -38,6 +40,7 @@ class _HighScoreBadgeState extends State<HighScoreBadge>
 
   @override
   Widget build(BuildContext context) {
+    final metin = Strings.of(context);
     return ValueListenableBuilder<int>(
       valueListenable: widget.store.best,
       builder: (context, best, _) {
@@ -82,7 +85,7 @@ class _HighScoreBadgeState extends State<HighScoreBadge>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'EN YÜKSEK SKOR',
+                    metin.highScoreLabel,
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,

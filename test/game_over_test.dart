@@ -6,6 +6,7 @@ import 'package:candy_match/ui/game_page.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:candy_match/i18n/app_language.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Oyun ekranını kurup içindeki [CandyGame] örneğini döndürür.
@@ -30,7 +31,12 @@ Future<void> settleCard(WidgetTester tester) async {
 }
 
 void main() {
-  setUp(() => SharedPreferences.setMockInitialValues({}));
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+    // Testler Türkçe metinlere bakıyor; cihaz dilinden bağımsız olsun.
+    LanguageStore.debugOverride = AppLanguage.tr;
+  });
+  tearDown(() => LanguageStore.debugOverride = null);
 
   group('oyun sonu', () {
     testWidgets('başlangıçta oyun sonu kartı yok', (tester) async {

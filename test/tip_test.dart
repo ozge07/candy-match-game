@@ -4,6 +4,7 @@ import 'package:candy_match/game/tip_store.dart';
 import 'package:candy_match/ui/game_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:candy_match/i18n/app_language.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> pumpGame(WidgetTester tester, TipStore tips) async {
@@ -34,7 +35,12 @@ bool tipVisible(WidgetTester tester) {
 }
 
 void main() {
-  setUp(() => SharedPreferences.setMockInitialValues({}));
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+    // Testler Türkçe metinlere bakıyor; cihaz dilinden bağımsız olsun.
+    LanguageStore.debugOverride = AppLanguage.tr;
+  });
+  tearDown(() => LanguageStore.debugOverride = null);
 
   group('bilgi ipucu', () {
     testWidgets('ilk oyunda kendiliğinden açılıyor', (tester) async {

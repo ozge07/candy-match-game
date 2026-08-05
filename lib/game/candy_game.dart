@@ -96,6 +96,10 @@ class CandyGame extends FlameGame {
   /// Oyuncunun bulunduğu seviye; HUD ve tema bunu izliyor.
   final ValueNotifier<int> level = ValueNotifier<int>(1);
 
+  /// Tahtanın çizdiği tebrik metinleri. Arayüz dil değişince güncelliyor;
+  /// varsayılan Türkçe, oyun dil okunmadan da açılabilmeli.
+  GameText texts = const GameText.turkish();
+
   LevelTheme theme = LevelTheme.forLevel(1);
 
   /// Tahtanın dünya koordinatındaki üst kenarı — tebrik yazısı ve efektler
@@ -182,7 +186,7 @@ class CandyGame extends FlameGame {
     audio.record();
     flashScreen();
     shakeCamera(intensity: 8, duration: 0.35);
-    showPraise('YENİ REKOR!', level: 3, color: const Color(0xFFFFD54A));
+    showPraise(texts.newRecord, level: 3, color: const Color(0xFFFFD54A));
     world.add(
       confetti(
         position: Vector2(gameWidth / 2, 0),
@@ -222,7 +226,7 @@ class CandyGame extends FlameGame {
   void _celebrateLevelUp(int newLevel) {
     audio.levelUp();
     showPraise(
-      'SEVİYE $newLevel',
+      '${texts.levelLabel} $newLevel',
       level: 3,
       color: LevelTheme.accent,
       atY: _levelBannerY,
@@ -434,4 +438,48 @@ class _CameraShake extends Component {
           ..scale(intensity * decay);
     viewfinder.position = _origin + offset;
   }
+}
+
+
+/// Flame tarafında çizilen metinler.
+///
+/// Arayüz katmanı `Strings`'ten doldurup oyuna veriyor; oyun sınıfı widget
+/// ağacına bağlı olmadığı için `BuildContext` kullanamıyor.
+class GameText {
+  const GameText({
+    required this.chainPraise,
+    required this.boom,
+    required this.crossBlast,
+    required this.megaBlast,
+    required this.colourBlast,
+    required this.bombRain,
+    required this.levelLabel,
+    required this.newRecord,
+    required this.bigMatch,
+  });
+
+  const GameText.turkish()
+    : chainPraise = const ['GÜZEL!', 'SÜPER!', 'MUHTEŞEM!', 'İNANILMAZ!'],
+      boom = 'BOOM!',
+      crossBlast = 'ÇAPRAZ PATLAMA!',
+      megaBlast = 'MEGA PATLAMA!',
+      colourBlast = 'RENK PATLAMASI!',
+      bombRain = 'BOMBA YAĞMURU!',
+      levelLabel = 'SEVİYE',
+      newRecord = 'YENİ REKOR!',
+      bigMatch = 'HARİKA!';
+
+  final List<String> chainPraise;
+  final String boom;
+  final String crossBlast;
+  final String megaBlast;
+  final String colourBlast;
+  final String bombRain;
+  final String levelLabel;
+
+  /// Oyun sırasında rekor kırılınca.
+  final String newRecord;
+
+  /// Beş ve üzeri tek kümede patlama.
+  final String bigMatch;
 }

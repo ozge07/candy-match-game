@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../i18n/strings.dart';
 import 'package:flutter/services.dart';
 
 import '../game/ads_controller.dart';
@@ -41,6 +43,33 @@ class _MenuScreenState extends State<MenuScreen>
     duration: const Duration(seconds: 6),
   )..repeat();
 
+  /// Son geri tuşuna basılma anı. İki saniye içinde tekrar basılırsa çıkılıyor.
+  DateTime? _sonGeri;
+
+  /// Geri tuşu menüdeyken uygulamayı kapatıyor. Tek dokunuşla kapanmak
+  /// istemiyoruz — oyuncu yanlışlıkla basınca oyundan atılmış oluyor.
+  void _geriTusu(bool didPop, Object? result) {
+    if (didPop) {
+      return;
+    }
+    final simdi = DateTime.now();
+    final onceki = _sonGeri;
+    if (onceki != null && simdi.difference(onceki) < const Duration(seconds: 2)) {
+      SystemNavigator.pop();
+      return;
+    }
+    _sonGeri = simdi;
+    ScaffoldMessenger.of(context)
+      ..clearSnackBars()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(Strings.of(context).pressBackAgain),
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+  }
+
   @override
   void dispose() {
     _drift.dispose();
@@ -65,7 +94,11 @@ class _MenuScreenState extends State<MenuScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final metin = Strings.of(context);
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: _geriTusu,
+      child: Scaffold(
       backgroundColor: const Color(0xFF0E0B24),
       body: Stack(
         fit: StackFit.expand,
@@ -76,7 +109,7 @@ class _MenuScreenState extends State<MenuScreen>
               children: [
                 const Spacer(flex: 3),
                 Text(
-                  'CANDY MATCH',
+                  '${metin.titleTop} ${metin.titleBottom}',
                   style: TextStyle(
                     fontSize: 34,
                     fontWeight: FontWeight.w900,
@@ -93,6 +126,8 @@ class _MenuScreenState extends State<MenuScreen>
                 ),
                 const Spacer(flex: 2),
                 HighScoreBadge(store: widget.highScores),
+                const SizedBox(height: 16),
+                const LanguageToggle(),
                 const Spacer(flex: 2),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 44),
@@ -108,7 +143,7 @@ class _MenuScreenState extends State<MenuScreen>
                           children: [
                             if (hasSave) ...[
                               MenuButton(
-                                label: 'DEVAM ET',
+                                label: metin.continueGame,
                                 icon: Icons.play_circle_fill_rounded,
                                 onPressed: () =>
                                     _openGame(resume: widget.saves.saved),
@@ -116,7 +151,7 @@ class _MenuScreenState extends State<MenuScreen>
                               const SizedBox(height: 16),
                             ],
                             MenuButton(
-                              label: 'YENİ OYUN',
+                              label: metin.newGame,
                               icon: Icons.play_arrow_rounded,
                               filled: !hasSave,
                               onPressed: _openGame,
@@ -126,7 +161,7 @@ class _MenuScreenState extends State<MenuScreen>
                       ),
                       const SizedBox(height: 16),
                       MenuButton(
-                        label: 'ÇIKIŞ',
+                        label: metin.exit,
                         icon: Icons.close_rounded,
                         filled: false,
                         onPressed: SystemNavigator.pop,
@@ -138,7 +173,8 @@ class _MenuScreenState extends State<MenuScreen>
               ],
             ),
           ),
-        ],
+          ],
+        ),
       ),
     );
   }

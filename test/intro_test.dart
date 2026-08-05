@@ -2,6 +2,7 @@ import 'package:candy_match/game/board.dart';
 import 'package:candy_match/game/candy_game.dart';
 import 'package:flame/game.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:candy_match/i18n/app_language.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<BoardComponent> pumpBoard(WidgetTester tester) async {
@@ -20,7 +21,12 @@ Future<void> advance(WidgetTester tester, {int frames = 40}) async {
 }
 
 void main() {
-  setUp(() => SharedPreferences.setMockInitialValues({}));
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+    // Testler Türkçe metinlere bakıyor; cihaz dilinden bağımsız olsun.
+    LanguageStore.debugOverride = AppLanguage.tr;
+  });
+  tearDown(() => LanguageStore.debugOverride = null);
 
   group('tahtanın dökülerek gelmesi', () {
     testWidgets('şekerler tahtanın üstünden başlar', (tester) async {

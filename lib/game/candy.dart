@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import '../app_log.dart';
 
 /// Bir şekerin türü.
 ///
@@ -252,7 +253,7 @@ class Candy extends PositionComponent {
       picture.dispose();
       return image;
     } catch (error) {
-      debugPrint('Şeker gövdesi rasterleştirilemedi: $error');
+      AppLog.warn('render', 'şeker gövdesi rasterleştirilemedi', error);
       return null;
     }
   }

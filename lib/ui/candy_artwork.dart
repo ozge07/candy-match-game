@@ -1,6 +1,9 @@
 import 'dart:math';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+
+import '../app_log.dart';
 
 import '../game/candy.dart';
 
@@ -73,8 +76,88 @@ class _ArtworkPainter extends CustomPainter {
     (0.50, 0.78, 0.8),
   ];
 
+  /// Zemin + parıltı + şekerler karede değişmiyor; yalnızca hafif bir süzülme
+  /// ve ışıltılar hareketli. Bu sabit katman on sekiz şekil, iki büyük blur ve
+  /// bir radyal gradyan demek — her karede yeniden çizilince menü ana iş
+  /// parçacığını tıkıyor ve düşük donanımda uygulama yanıt vermez hâle
+  /// geliyordu. Bir kez rasterleştirip saklıyoruz.
+  static ui.Image? _katman;
+  static Size? _katmanBoyutu;
+  static double _katmanOlcegi = 0;
+
+  static final Paint _katmanBoyasi = Paint()
+    ..filterQuality = FilterQuality.medium;
+
+  /// Sabit katmanı üretir; ölçü ya da piksel oranı değişirse yeniliyor.
+  static ui.Image? _sabitKatman(Size size, double olcek) {
+    final onceki = _katman;
+    if (onceki != null && _katmanBoyutu == size && _katmanOlcegi == olcek) {
+      return onceki;
+    }
+    final genislik = (size.width * olcek).ceil();
+    final yukseklik = (size.height * olcek).ceil();
+    if (genislik <= 0 || yukseklik <= 0) {
+      return null;
+    }
+    try {
+      final kaydedici = ui.PictureRecorder();
+      final tuval = Canvas(kaydedici);
+      tuval.scale(olcek);
+      _cizSabit(tuval, size);
+      final resim = kaydedici.endRecording().toImageSync(genislik, yukseklik);
+      onceki?.dispose();
+      _katman = resim;
+      _katmanBoyutu = size;
+      _katmanOlcegi = olcek;
+      return resim;
+    } catch (error) {
+      AppLog.warn('artwork', 'sabit katman rasterleştirilemedi', error);
+      return null;
+    }
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
+    // Katmanı cihaz çözünürlüğünde üretmek pahalıya patlıyor: iki büyük blur
+    // 17 milyon piksele uygulanınca ilk çizim saniyeler sürüyor ve açılış
+    // kilitleniyor. Zaten yumuşak bir arka plan, düşük çözünürlükte üretip
+    // büyütmek gözle ayırt edilmiyor.
+    const enFazlaGenislik = 540.0;
+    final olcek = size.width <= 0
+        ? 1.0
+        : (enFazlaGenislik / size.width).clamp(0.25, 1.0);
+    final katman = _sabitKatman(size, olcek);
+
+    if (katman != null) {
+      // Bütün kompozisyon yavaşça nefes alsın diye tek bir kaydırma yetiyor.
+      final kayma = sin(t * 2 * pi) * size.height * 0.008;
+      canvas.save();
+      canvas.translate(0, kayma);
+      canvas.drawImageRect(
+        katman,
+        Rect.fromLTWH(0, 0, katman.width.toDouble(), katman.height.toDouble()),
+        Offset.zero & size,
+        _katmanBoyasi,
+      );
+      canvas.restore();
+    } else {
+      // Rasterleştirme başarısızsa eski yoldan çiziyoruz; görüntü aynı.
+      _cizSabit(canvas, size);
+    }
+
+    for (final (x, y, scale) in _sparkles) {
+      final twinkle = (sin(t * 2 * pi * 2 + x * 11 + y * 5) + 1) / 2;
+      _drawSparkle(
+        canvas,
+        Offset(size.width * x, size.height * y),
+        size.width * 0.022 * scale * (0.6 + twinkle * 0.6),
+        Colors.white.withValues(alpha: 0.25 + twinkle * 0.5),
+      );
+    }
+  }
+
+  /// Karede değişmeyen katman: zemin, parıltı ve şekerler.
+  static void _cizSabit(Canvas canvas, Size size) {
     final rect = Offset.zero & size;
 
     canvas.drawRect(
@@ -98,15 +181,13 @@ class _ArtworkPainter extends CustomPainter {
     );
 
     for (final (x, y, s, type, tilt) in _candies) {
-      // Her şeker kendi hızında, birbirinden bağımsız süzülüyor.
-      final drift = sin(t * 2 * pi + x * 7 + y * 3) * size.height * 0.012;
       final side = size.width * s;
-      final centre = Offset(size.width * x, size.height * y + drift);
+      final centre = Offset(size.width * x, size.height * y);
       final colour = Candy.palette[type % Candy.palette.length];
 
       canvas.save();
       canvas.translate(centre.dx, centre.dy);
-      canvas.rotate(tilt + sin(t * 2 * pi + x * 5) * 0.04);
+      canvas.rotate(tilt);
 
       final shape = Candy.shapeOf(
         Rect.fromCenter(center: Offset.zero, width: side, height: side),
@@ -140,19 +221,10 @@ class _ArtworkPainter extends CustomPainter {
       canvas.restore();
     }
 
-    for (final (x, y, scale) in _sparkles) {
-      final twinkle = (sin(t * 2 * pi * 2 + x * 11 + y * 5) + 1) / 2;
-      _drawSparkle(
-        canvas,
-        Offset(size.width * x, size.height * y),
-        size.width * 0.022 * scale * (0.6 + twinkle * 0.6),
-        Colors.white.withValues(alpha: 0.35 + twinkle * 0.5),
-      );
-    }
   }
 
   /// Dört uçlu parıltı: iki dikey damla şeklinde.
-  void _drawSparkle(Canvas canvas, Offset centre, double radius, Color color) {
+  static void _drawSparkle(Canvas canvas, Offset centre, double radius, Color color) {
     final path = Path()
       ..moveTo(centre.dx, centre.dy - radius)
       ..quadraticBezierTo(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../game/ads_controller.dart';
 import '../game/audio_controller.dart';
 import '../game/candy_game.dart';
+import '../i18n/strings.dart';
 import '../game/game_save_store.dart';
 import '../game/high_score_store.dart';
 import '../game/tip_store.dart';
@@ -79,15 +80,36 @@ class _GamePageState extends State<GamePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Tebrik ve seviye metinleri Flame tarafında çiziliyor; dil değişince
+    // oyuna yeni metinleri veriyoruz.
+    final metin = Strings.of(context);
+    _game.texts = GameText(
+      chainPraise: metin.chainPraise,
+      boom: metin.boom,
+      crossBlast: metin.crossBlast,
+      megaBlast: metin.megaBlast,
+      colourBlast: metin.colourBlast,
+      bombRain: metin.bombRain,
+      levelLabel: metin.level(0).split(' ').first,
+      newRecord: metin.newRecord,
+      bigMatch: metin.bigMatch,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF141130),
       body: GameWidget<CandyGame>(
         game: _game,
         overlayBuilderMap: {
-          hudOverlay: (context, game) =>
-              HudOverlay(game: game, onExitToMenu: _exitToMenu),
-          levelOverlay: (context, game) => LevelBar(game: game),
+          hudOverlay: (context, game) => RepaintBoundary(
+            child: HudOverlay(game: game, onExitToMenu: _exitToMenu),
+          ),
+          levelOverlay: (context, game) =>
+              RepaintBoundary(child: LevelBar(game: game)),
           gameOverOverlay: (context, game) =>
               GameOverOverlay(
                 game: game,

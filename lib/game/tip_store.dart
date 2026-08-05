@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../app_log.dart';
 
 /// Oyuna ilk girişte gösterilen ipucunun daha önce görülüp görülmediğini
 /// saklar.
@@ -19,7 +20,7 @@ class TipStore {
       seen.value = prefs.getBool(_key) ?? false;
     } catch (error) {
       // Okunamazsa ipucu bir kez daha gösterilir; zararsız.
-      debugPrint('İpucu durumu okunamadı: $error');
+      AppLog.warn('tips', 'durum okunamadı', error);
     }
   }
 
@@ -32,7 +33,7 @@ class TipStore {
       final prefs = await SharedPreferences.getInstance().timeout(_timeout);
       await prefs.setBool(_key, true).timeout(_timeout);
     } catch (error) {
-      debugPrint('İpucu durumu kaydedilemedi: $error');
+      AppLog.warn('tips', 'durum kaydedilemedi', error);
     }
   }
 

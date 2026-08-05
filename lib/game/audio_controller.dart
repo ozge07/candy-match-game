@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../app_log.dart';
 
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart';
@@ -57,7 +58,7 @@ class AudioController {
       _ready = true;
     } catch (error, stackTrace) {
       _ready = false;
-      debugPrint('Ses yüklenemedi, oyun sessiz devam ediyor: $error');
+      AppLog.warn('audio', 'ses yüklenemedi, oyun sessiz devam ediyor', error);
       debugPrintStack(stackTrace: stackTrace);
     } finally {
       progress.value = 1;

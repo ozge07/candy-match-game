@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../i18n/strings.dart';
+
 import '../game/ads_controller.dart';
 import '../game/audio_controller.dart';
 import '../game/game_save_store.dart';
@@ -119,10 +121,11 @@ class _GameTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final metin = Strings.of(context);
     return Column(
       children: [
         Text(
-          'CANDY',
+          metin.titleTop,
           style: TextStyle(
             fontSize: 54,
             fontWeight: FontWeight.w900,
@@ -140,7 +143,7 @@ class _GameTitle extends StatelessWidget {
         ),
         const SizedBox(height: 2),
         Text(
-          'MATCH',
+          metin.titleBottom,
           style: TextStyle(
             fontSize: 54,
             fontWeight: FontWeight.w900,
@@ -168,10 +171,11 @@ class _LoadingBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final metin = Strings.of(context);
     return Column(
       children: [
         Text(
-          'YÜKLENİYOR…',
+          metin.loading,
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w800,

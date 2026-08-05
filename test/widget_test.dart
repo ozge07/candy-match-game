@@ -6,16 +6,23 @@ import 'package:candy_match/game/tip_store.dart';
 import 'package:candy_match/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:candy_match/i18n/app_language.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  setUp(() => SharedPreferences.setMockInitialValues({}));
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+    // Testler Türkçe metinlere bakıyor; cihaz dilinden bağımsız olsun.
+    LanguageStore.debugOverride = AppLanguage.tr;
+  });
+  tearDown(() => LanguageStore.debugOverride = null);
 
   testWidgets('açılış ekranı ve yükleme çubuğu görünüyor', (tester) async {
     await tester.pumpWidget(
       CandyMatchApp(
         audio: AudioController(),
         ads: AdsController.disabled(),
+        languages: LanguageStore(),
         highScores: HighScoreStore(),
         saves: GameSaveStore(),
         tips: TipStore(),

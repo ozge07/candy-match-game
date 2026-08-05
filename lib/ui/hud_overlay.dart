@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../i18n/strings.dart';
+
 import '../game/candy_game.dart';
 
 /// Oyunun üstünde duran skor / rekor göstergesi ve düğmeler.
@@ -20,6 +22,7 @@ class HudOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final metin = Strings.of(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
@@ -36,14 +39,14 @@ class HudOverlay extends StatelessWidget {
                   valueListenable: game.audio.muted,
                   builder: (context, muted, _) => _RoundButton(
                     icon: muted ? Icons.volume_off : Icons.volume_up,
-                    tooltip: muted ? 'Sesi aç' : 'Sesi kapat',
+                    tooltip: muted ? metin.soundOn : metin.soundOff,
                     onPressed: game.audio.toggleMute,
                   ),
                 ),
                 const SizedBox(height: 8),
                 _RoundButton(
                   icon: Icons.home_rounded,
-                  tooltip: 'Menüye dön',
+                  tooltip: metin.backToMenu,
                   onPressed: onExitToMenu,
                 ),
               ],
@@ -62,12 +65,13 @@ class _ScoreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final metin = Strings.of(context);
     return _Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const _CardLabel('SKOR'),
+          _CardLabel(metin.score),
           const SizedBox(height: 2),
           ValueListenableBuilder<int>(
             valueListenable: game.score,
@@ -85,7 +89,7 @@ class _ScoreCard extends StatelessWidget {
           ValueListenableBuilder<int>(
             valueListenable: game.moves,
             builder: (context, moves, _) => Text(
-              '$moves hamle',
+              metin.moves(moves),
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.45),
                 fontSize: 11,
@@ -107,6 +111,7 @@ class _BestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final metin = Strings.of(context);
     return ValueListenableBuilder<int>(
       valueListenable: game.highScores.best,
       builder: (context, best, _) => ValueListenableBuilder<int>(
@@ -119,7 +124,7 @@ class _BestCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const _CardLabel('REKOR'),
+                _CardLabel(metin.record),
                 const SizedBox(height: 2),
                 Row(
                   children: [
@@ -143,7 +148,7 @@ class _BestCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  leading ? 'lider sensin' : 'en iyi skor',
+                  leading ? 'lider sensin' : metin.bestScore,
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.45),
                     fontSize: 11,
