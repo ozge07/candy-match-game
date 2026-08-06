@@ -232,7 +232,7 @@ geçmek için:
 
 ## Play Store'a çıkmadan önce
 
-- **Paket adı** şu an `com.ozge.candy_match` (`android/app/build.gradle.kts` içindeki
+- **Paket adı** şu an `com.bluelabsgames.candymatch` (`android/app/build.gradle.kts` içindeki
   `applicationId`). Play Store'da benzersiz olmalı ve yayınlandıktan sonra
   değiştirilemez — yayına çıkmadan önce kendi seçtiğin adla değiştir.
 - `flutter build appbundle --release` ile imzalı bir `.aab` üretilmeli; bunun için
