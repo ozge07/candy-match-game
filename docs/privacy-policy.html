@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gizlilik Politikası — Candy Match</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    margin: 0 auto; padding: 32px 20px 64px; max-width: 720px;
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #1a1a1a; background: #fff;
+  }
+  h1 { font-size: 26px; margin: 0 0 18px; }
+  h2 { font-size: 19px; margin: 34px 0 8px; }
+  h3 { font-size: 16px; margin: 22px 0 6px; }
+  a { color: #F5A623; }
+  ul { padding-left: 20px; }
+  code { background: #f1f4f6; padding: 1px 5px; border-radius: 4px; font-size: 14px; }
+  .tablo { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 15px; }
+  th, td { border: 1px solid #e0e4e8; padding: 8px 10px; text-align: left; }
+  th { background: #f6f8fa; }
+  @media (prefers-color-scheme: dark) {
+    body { color: #e2e6ea; background: #1C1836; }
+    a { color: #F5A623; }
+    code { background: rgba(255,255,255,.08); }
+    th, td { border-color: rgba(255,255,255,.14); }
+    th { background: rgba(255,255,255,.06); }
+  }
+</style>
+</head>
+<body>
+<h1>Candy Match — Gizlilik Politikası</h1>
+<p><strong>Son güncelleme:</strong> 5 Ağustos 2026 <strong>Geliştirici:</strong> Blue Labs Games <strong>İletişim:</strong> bluelabsgames@gmail.com</p>
+<h2>Özet</h2>
+<p>Oyunun kendisi sizden hiçbir bilgi istemez ve hiçbir bilgi toplamaz. Hesap açmanız gerekmez, isim ya da e-posta sorulmaz, analiz (analytics) aracı kullanılmaz.</p>
+<p>Oyunda <strong>isteğe bağlı ödüllü reklamlar</strong> vardır. Reklamları Google AdMob gösterir ve AdMob kendi verilerini toplar; aşağıdaki bölüm bunu açıklar. Reklam izlemediğiniz sürece oyun oynanırken veri gönderilmez.</p>
+<h2>Toplanan veriler</h2>
+<p><strong>Hiçbiri.</strong> Uygulama şunları toplamaz:</p>
+<ul>
+<li>Ad, e-posta, telefon numarası veya başka kimlik bilgisi</li>
+<li>Konum bilgisi</li>
+<li>Kişiler, fotoğraflar, dosyalar, takvim veya mikrofon/kamera verisi</li>
+<li>Cihaz kimliği, reklam kimliği (advertising ID) veya benzeri tanımlayıcılar</li>
+<li>Kullanım/analiz verisi, çökme raporu</li>
+<li>Ödeme veya finansal bilgi</li>
+</ul>
+<h2>Cihazınızda saklanan bilgiler</h2>
+<p>Oyunun ilerlemesini hatırlayabilmesi için <strong>yalnızca cihazınızın kendi belleğinde</strong> üç bilgi tutulur:</p>
+<div class="tablo"><table><thead><tr>
+<th>Saklanan</th>
+<th>İçeriği</th>
+</tr></thead><tbody>
+<tr><td>En yüksek skor</td><td>Bir sayı</td></tr>
+<tr><td>Yarım kalan oyun</td><td>Tahtadaki şekerlerin dizilimi, skor, hamle sayısı, seviye</td></tr>
+<tr><td>İpucu gösterildi mi</td><td>Evet/hayır bilgisi</td></tr>
+</tbody></table></div>
+<p>Bu bilgiler:</p>
+<ul>
+<li>Uygulamanın kendi özel alanında (Android <code>SharedPreferences</code>) tutulur,</li>
+<li><strong>Hiçbir sunucuya gönderilmez</strong>, başka uygulamalarla paylaşılmaz,</li>
+<li>Uygulamayı kaldırdığınızda ya da Ayarlar → Uygulamalar → Candy Match →</li>
+</ul>
+<p>Depolama → Verileri temizle dediğinizde tamamen silinir.</p>
+<p>Bunlar kişisel veri değildir ve sizi tanımlamaz.</p>
+<h2>İzinler</h2>
+<p>Uygulamanın istediği izinlerin tamamı reklam SDK&#x27;sından gelir:</p>
+<div class="tablo"><table><thead><tr>
+<th>İzin</th>
+<th>Ne için</th>
+</tr></thead><tbody>
+<tr><td><code>INTERNET</code>, <code>ACCESS_NETWORK_STATE</code></td><td>Reklamı indirmek ve bağlantıyı kontrol etmek</td></tr>
+<tr><td><code>AD_ID</code>, <code>ACCESS_ADSERVICES_*</code></td><td>Reklam kimliği ve Android&#x27;in reklam ölçüm API&#x27;leri</td></tr>
+<tr><td><code>WAKE_LOCK</code>, <code>FOREGROUND_SERVICE</code></td><td>Reklam videosu oynarken ekranın kapanmaması</td></tr>
+</tbody></table></div>
+<p>Oyunun kendisi hiçbir izin istemez: kameraya, mikrofona, rehbere, konuma ya da dosyalarınıza erişmez.</p>
+<h2>Analiz</h2>
+<p>Uygulamada analiz (analytics) aracı ya da takip teknolojisi yoktur. Üçüncü taraflarla tek veri paylaşımı yukarıda anlatılan reklam SDK&#x27;sı üzerindendir.</p>
+<h2>Üçüncü taraf bileşenler</h2>
+<p>Oyun açık kaynaklı Flutter ve Flame kütüphaneleriyle geliştirilmiştir. Ses efektleri sıfırdan sentezlenmiştir; dışarıdan indirilen içerik kullanılmaz. Kullanılan kütüphanelerin hiçbiri veri toplamaz.</p>
+<h2>Çocukların gizliliği</h2>
+<p>Uygulama hiç kimseden, çocuklar dahil, veri toplamaz. 13 yaş altı kullanıcılardan bilerek veri toplanmaz çünkü hiçbir kullanıcıdan veri toplanmaz.</p>
+<h2>Bu politikadaki değişiklikler</h2>
+<p>Politika değişirse bu sayfa güncellenir ve yukarıdaki &quot;Son güncelleme&quot; tarihi değiştirilir.</p>
+<h2>İletişim</h2>
+<p>Sorularınız için: <strong>bluelabsgames@gmail.com</strong></p>
+</body>
+</html>

@@ -1,7 +1,7 @@
 # Candy Match — Gizlilik Politikası
 
 **Son güncelleme:** 5 Ağustos 2026
-**Geliştirici:** ozge
+**Geliştirici:** Blue Labs Games
 **İletişim:** bluelabsgames@gmail.com
 
 ## Özet
