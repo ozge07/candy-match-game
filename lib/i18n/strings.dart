@@ -65,7 +65,7 @@ class Strings {
   String get newRecord => _pick('YENİ REKOR!', 'NEW RECORD!');
   String get watchingAd => _pick('REKLAM AÇILIYOR…', 'LOADING AD…');
   String get continueSubtitle =>
-      _pick('reklam izle, tahta karışsın', 'watch an ad, shuffle the board');
+      _pick('tahta karışsın', 'shuffle the board');
   String get backToMenuButton => _pick('MENÜYE DÖN', 'BACK TO MENU');
 
   // --- Oyun içi tebrikler (Flame tarafında çiziliyor) ---

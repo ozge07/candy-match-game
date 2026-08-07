@@ -1,63 +1,50 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 
-/// Reklam kimliklerinin tek kaynağı.
+import 'ads_controller.dart';
+import 'unity_ads_provider.dart';
+
+/// Reklam yapilandirmasi.
 ///
-/// **Gerçek kimlikler bu dosyada yazmaz.** Kaynakta yalnızca Google'ın herkese
-/// açık test birimleri var; gerçek değerler derleme sırasında geçiliyor:
+/// ## Gelistirirken hic reklam yok
 ///
-/// ```bash
-/// flutter build appbundle --release \
-///   --dart-define=ADMOB_REWARDED_ANDROID=ca-app-pub-XXXX/YYYY
-/// ```
+/// Yayin (release) disi **hicbir** derlemede reklam saglayicisi kurulmuyor:
+/// SDK baslatilmiyor, tek bir istek bile gitmiyor, test reklami dahi
+/// acilmiyor. Kimlik `--dart-define` ile verilmis olsa bile yok sayiliyor.
 ///
-/// Hiçbir şey geçilmezse test kimlikleri kullanılır. Debug ve profile
-/// derlemelerinde ise gerçek kimlik verilmiş olsa bile **her zaman** test
-/// reklamı gösterilir: kendi gerçek reklamına tıklamak geçersiz trafik sayılır
-/// ve AdMob hesabının kapatılmasına yol açar.
+/// Sebep: bu projede AdMob hesabi gecersiz trafik nedeniyle kapandi. Ikinci
+/// bir reddedilme riskini tamamen ortadan kaldirmanin tek kesin yolu,
+/// gelistirme derlemesinin reklam agiyla hic konusmamasi.
+///
+/// Ozellikler bu sirada kaybolmuyor: saglayici yokken odul dogrudan veriliyor
+/// (bkz. [NoAdsProvider]).
+///
+/// ## Yayinda gercek reklam
+///
+/// `flutter build --release` ile ve `UNITY_GAME_ID` gecilerek derlendiginde
+/// Unity saglayicisi devreye giriyor (bkz. `tool/build_release.sh`).
 class AdConfig {
   const AdConfig._();
 
-  // Google'ın belgelerinde yayımladığı test birimleri. Kazanç getirmezler,
-  // depoda durmalarında sakınca yok.
-  static const String _testRewardedAndroid =
-      'ca-app-pub-3940256099942544/5224354917';
-  static const String _testRewardedIos =
-      'ca-app-pub-3940256099942544/1712485313';
+  static const String _unityGameId = String.fromEnvironment('UNITY_GAME_ID');
 
-  // Derleme sırasında verilmezse boş kalır.
-  static const String _realRewardedAndroid = String.fromEnvironment(
-    'ADMOB_REWARDED_ANDROID',
-  );
-  static const String _realRewardedIos = String.fromEnvironment(
-    'ADMOB_REWARDED_IOS',
+  static const String _unityPlacementId = String.fromEnvironment(
+    'UNITY_REWARDED_PLACEMENT',
+    defaultValue: 'Rewarded_Android',
   );
 
-  /// Test reklamı mı gösteriliyor?
-  static bool get usingTestAds {
-    if (kDebugMode || kProfileMode) {
-      return true;
+  /// Reklamlar yalnizca yayin derlemesinde ve kimlik verilmisse etkin.
+  static bool get adsEnabled => kReleaseMode && _unityGameId.isNotEmpty;
+
+  /// Oyunun kullanacagi denetleyici.
+  static AdsController buildController() {
+    if (!adsEnabled) {
+      return AdsController();
     }
-    return _realUnitId.isEmpty;
-  }
-
-  static String get _realUnitId =>
-      Platform.isIOS ? _realRewardedIos : _realRewardedAndroid;
-
-  static String get _testUnitId =>
-      Platform.isIOS ? _testRewardedIos : _testRewardedAndroid;
-
-  /// Ödüllü reklam birimi kimliği.
-  static String get rewardedUnitId => usingTestAds ? _testUnitId : _realUnitId;
-
-  /// Açılışta bir kez günlüğe yazılıyor; yanlış derlemeyle yayına çıkmayı
-  /// fark etmeyi kolaylaştırıyor.
-  static void debugDescribe() {
-    debugPrint(
-      usingTestAds
-          ? 'AdMob: TEST reklamları kullanılıyor ($_testUnitId)'
-          : 'AdMob: GERÇEK reklamlar kullanılıyor',
+    return AdsController(
+      provider: UnityRewardedProvider(
+        gameId: _unityGameId,
+        placementId: _unityPlacementId,
+      ),
     );
   }
 }

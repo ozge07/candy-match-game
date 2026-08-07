@@ -1,151 +1,89 @@
-import 'dart:async';
+import 'package:flutter/foundation.dart';
+
 import '../app_log.dart';
 
-import 'package:flutter/foundation.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-
-import 'ad_config.dart';
-
-/// Ödüllü reklamları yönetir: oyuncu reklamı sonuna kadar izlerse tahta
-/// karıştırılıp oyun kaldığı yerden devam ediyor.
+/// Odullu reklam saglayicisi arayuzu.
 ///
-/// Hangi reklam kimliğinin kullanılacağına [AdConfig] karar veriyor: debug ve
-/// profile derlemelerinde her zaman Google'ın test birimleri, release'de ise
-/// `--dart-define` ile geçilmişse gerçek birim.
+/// Oyun hangi reklam aginin kullanildigini bilmiyor; yalnizca bu arayuzu
+/// cagiriyor. Saglayici degistirmek tek bir sinif yazmak demek — oyun kodu
+/// hic degismiyor.
 ///
-/// Kendi gerçek reklamına tıklamak AdMob hesabının kapatılmasına yol açar;
-/// bu yüzden geliştirme derlemelerine gerçek kimlik hiç girmiyor.
-class AdsController {
-  AdsController({this.enabled = true});
+/// AdMob basta bu arayuzun arkasindaydi; hesap kapandigi icin kaldirildi.
+/// Unity Ads (ya da baska bir ag) eklenirken yapilacak tek sey bu arayuzu
+/// uygulayan yeni bir sinif yazip [AdsController]'a vermek.
+abstract class RewardedAdProvider {
+  /// Reklam gosterime hazir mi?
+  ValueListenable<bool> get isReady;
 
-  /// Reklamların hiç açılmadığı sürüm: testler ve reklam desteklenmeyen
-  /// ortamlar için. Oyun reklamsız çalışmaya devam ediyor, "devam et"
-  /// düğmesi hiç çıkmıyor.
-  AdsController.disabled() : enabled = false;
+  /// SDK'yi hazirlar. Tekrar tekrar cagrilabilir.
+  Future<void> initialise();
 
-  /// `false` ise SDK'ya hiç dokunulmuyor.
-  final bool enabled;
+  /// Odullu reklami gosterir. Odul hak edildiyse `true`.
+  Future<bool> showRewarded();
 
-  /// Reklam altyapısı yanıt vermezse oyunu bekletmeyelim.
-  ///
-  /// Yavaş bir cihazda ya da zayıf bağlantıda SDK'nın açılması uzun sürüyor;
-  /// süre çok kısa olursa reklam hiç hazır olmuyor ve "devam et" hiç çıkmıyor.
-  static const Duration _timeout = Duration(seconds: 30);
+  void dispose();
+}
 
-  RewardedAd? _ad;
-  bool _initialised = false;
-  bool _initialising = false;
-  bool _loading = false;
+/// Reklam agi bagli degilken kullanilan saglayici.
+///
+/// Odulu dogrudan veriyor: oyuncu reklam aginin yoklugundan sorumlu degil.
+/// "Devam et" hakki zaten tur basina bir kez ile sinirli, dolayisiyla oyun
+/// dengesi bozulmuyor.
+class NoAdsProvider implements RewardedAdProvider {
+  NoAdsProvider();
 
-  /// Gösterilecek hazır bir reklam var mı? Düğme buna göre çıkıyor.
+  @override
+  final ValueNotifier<bool> isReady = ValueNotifier<bool>(true);
+
+  @override
+  Future<void> initialise() async {
+    AppLog.info('ads', 'reklam saglayicisi bagli degil, odul dogrudan veriliyor');
+  }
+
+  @override
+  Future<bool> showRewarded() async => true;
+
+  @override
+  void dispose() => isReady.dispose();
+}
+
+/// Reklamlarin hic gosterilmedigi saglayici (testler icin).
+class DisabledAdsProvider implements RewardedAdProvider {
+  DisabledAdsProvider();
+
+  @override
   final ValueNotifier<bool> isReady = ValueNotifier<bool>(false);
 
-  /// SDK'yı başlatır ve bir reklam hazırlar.
-  ///
-  /// Tekrar tekrar çağrılabilir: zaten hazırsa hiçbir şey yapmaz, daha önce
-  /// başarısız olduysa yeniden dener. Her oyun başında çağırıyoruz ki geçici
-  /// bir ağ sorunu bütün oturumu reklamsız bırakmasın.
-  ///
-  /// Hata yutuluyor: reklam yüklenemezse oyun reklamsız devam etmeli,
-  /// oyuncu bundan etkilenmemeli.
-  Future<void> initialise() async {
-    if (!enabled || _initialising) {
-      return;
-    }
-    if (_initialised) {
-      // Altyapı ayakta ama elde reklam kalmamış olabilir (gösterildi ya da
-      // yükleme başarısız oldu); yenisini hazırla.
-      unawaited(_load());
-      return;
-    }
-    _initialising = true;
-    try {
-      await MobileAds.instance.initialize().timeout(_timeout);
-      AdConfig.debugDescribe();
-      _initialised = true;
-      unawaited(_load());
-    } catch (error) {
-      // `_initialised` false kalıyor; bir sonraki çağrı baştan deneyecek.
-      AppLog.warn('ads', 'altyapı başlatılamadı', error);
-    } finally {
-      _initialising = false;
-    }
-  }
+  @override
+  Future<void> initialise() async {}
 
-  Future<void> _load() async {
-    if (!enabled || !_initialised || _loading || _ad != null) {
-      return;
-    }
-    _loading = true;
-    final completer = Completer<void>();
+  @override
+  Future<bool> showRewarded() async => false;
 
-    RewardedAd.load(
-      adUnitId: AdConfig.rewardedUnitId,
-      request: const AdRequest(),
-      rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (ad) {
-          _ad = ad;
-          isReady.value = true;
-          _loading = false;
-          if (!completer.isCompleted) {
-            completer.complete();
-          }
-        },
-        onAdFailedToLoad: (error) {
-          _ad = null;
-          isReady.value = false;
-          _loading = false;
-          AppLog.warn('ads', 'ödüllü reklam yüklenemedi', error);
-          if (!completer.isCompleted) {
-            completer.complete();
-          }
-        },
-      ),
-    );
+  @override
+  void dispose() => isReady.dispose();
+}
 
-    await completer.future;
-  }
+/// Oyunun kullandigi reklam denetleyicisi.
+class AdsController {
+  AdsController({RewardedAdProvider? provider})
+      : provider = provider ?? NoAdsProvider();
 
-  /// Reklamı gösterir. Oyuncu **ödülü hak edecek kadar** izlediyse `true`
-  /// döner; kapatırsa ya da reklam yoksa `false`.
-  Future<bool> showRewarded() async {
-    final ad = _ad;
-    if (ad == null) {
-      return false;
-    }
-    _ad = null;
-    isReady.value = false;
+  /// Reklamlarin hic acilmadigi surum: testler ve reklam desteklenmeyen
+  /// ortamlar icin.
+  AdsController.disabled() : provider = DisabledAdsProvider();
 
-    var earned = false;
-    final closed = Completer<void>();
+  final RewardedAdProvider provider;
 
-    ad.fullScreenContentCallback = FullScreenContentCallback(
-      onAdDismissedFullScreenContent: (ad) {
-        ad.dispose();
-        if (!closed.isCompleted) {
-          closed.complete();
-        }
-        // Bir sonraki tur için yeni reklam hazırla.
-        unawaited(_load());
-      },
-      onAdFailedToShowFullScreenContent: (ad, error) {
-        ad.dispose();
-        AppLog.warn('ads', 'reklam gösterilemedi', error);
-        if (!closed.isCompleted) {
-          closed.complete();
-        }
-        unawaited(_load());
-      },
-    );
+  /// Gosterilecek hazir bir reklam var mi? Dugme buna gore cikiyor.
+  ValueListenable<bool> get isReady => provider.isReady;
 
-    await ad.show(onUserEarnedReward: (_, _) => earned = true);
-    await closed.future;
-    return earned;
-  }
+  /// Gercek bir reklam agi bagli mi? Arayuz metni buna gore degisiyor.
+  bool get hasProvider => provider is! NoAdsProvider && provider is! DisabledAdsProvider;
 
-  void dispose() {
-    _ad?.dispose();
-    _ad = null;
-    isReady.dispose();
-  }
+  Future<void> initialise() => provider.initialise();
+
+  Future<bool> showRewarded() => provider.showRewarded();
+
+  void dispose() => provider.dispose();
 }

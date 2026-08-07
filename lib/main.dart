@@ -4,6 +4,7 @@ import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 
 import 'bootstrap.dart';
+import 'game/ad_config.dart';
 import 'game/ads_controller.dart';
 import 'game/audio_controller.dart';
 import 'game/game_save_store.dart';
@@ -20,7 +21,7 @@ Future<void> main() => bootstrap(() async {
   await Flame.device.setPortrait();
 
   // Reklam altyapısı arka planda açılıyor; oyunu bekletmiyor.
-  final ads = AdsController();
+  final ads = AdConfig.buildController();
   unawaited(ads.initialise());
 
   // Dil tercihi ilk ekran çizilmeden hazır olsun.

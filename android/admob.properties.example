@@ -1,7 +1,0 @@
-# Bu dosyayı "admob.properties" adıyla kopyalayıp kendi AdMob uygulama
-# kimliğini yaz. Gerçek dosya .gitignore'da olduğu için depoya girmez.
-#
-#   cp android/admob.properties.example android/admob.properties
-#
-# Biçimi: ca-app-pub-XXXXXXXXXXXXXXXX~YYYYYYYYYY  (tilde işaretine dikkat)
-admobAppId=ca-app-pub-3940256099942544~3347511713
