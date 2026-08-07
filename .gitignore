@@ -63,3 +63,6 @@ test/bomb_test.dart
 test/rainbow_swap_test.dart
 test/hint_test.dart
 NOTES.md
+
+# Kalite kontrol paketi betigi: gercek Game ID iceriyor.
+tool/build_qa.sh

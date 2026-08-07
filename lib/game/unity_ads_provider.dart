@@ -18,13 +18,20 @@ import 'ads_controller.dart';
 /// Gelistirme derlemesinin reklam agiyla hic konusmamasi, ikinci bir
 /// reddedilmeyi imkansiz kiliyor.
 class UnityRewardedProvider implements RewardedAdProvider {
-  UnityRewardedProvider({required this.gameId, required this.placementId});
+  UnityRewardedProvider({
+    required this.gameId,
+    required this.placementId,
+    this.testMode = false,
+  });
 
   /// Unity Dashboard'daki oyun kimligi (platforma ozel).
   final String gameId;
 
   /// Odullu yerlesim kimligi.
   final String placementId;
+
+  /// Gercek pakette test reklami gostermek icin (kalite kontrolu).
+  final bool testMode;
 
   @override
   final ValueNotifier<bool> isReady = ValueNotifier<bool>(false);
@@ -37,10 +44,9 @@ class UnityRewardedProvider implements RewardedAdProvider {
     }
     await UnityAds.init(
       gameId: gameId,
-      // Yayin derlemesindeyiz: gercek reklamlar.
-      testMode: false,
+        testMode: testMode,
       onComplete: () {
-        AppLog.info('ads', 'Unity Ads hazir (gercek reklamlar)');
+        AppLog.info('ads', 'Unity Ads hazir (${testMode ? 'TEST' : 'GERCEK'} reklamlar)');
         _yukle();
       },
       onFailed: (error, message) {

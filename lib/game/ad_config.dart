@@ -32,6 +32,13 @@ class AdConfig {
     defaultValue: 'Rewarded_Android',
   );
 
+  /// Yayin paketinde TEST reklami goster.
+  ///
+  /// Kendi uygulamani gercek pakette denemek icin: `tool/build_qa.sh`.
+  /// Unity test reklami gosterir — gelir yazmaz, gecersiz trafik riski yok.
+  /// Varsayilan `false`; Play'e giden pakette gercek reklam cikar.
+  static const bool testMode = bool.fromEnvironment('UNITY_TEST_MODE');
+
   /// Reklamlar yalnizca yayin derlemesinde ve kimlik verilmisse etkin.
   static bool get adsEnabled => kReleaseMode && _unityGameId.isNotEmpty;
 
@@ -44,6 +51,7 @@ class AdConfig {
       provider: UnityRewardedProvider(
         gameId: _unityGameId,
         placementId: _unityPlacementId,
+        testMode: testMode,
       ),
     );
   }
