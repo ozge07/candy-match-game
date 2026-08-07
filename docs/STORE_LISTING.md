@@ -49,7 +49,7 @@ kullanılabilir — Play dile özel görüntü zorunlu tutmuyor.
 
 Ayrıntılı yanıtlar: [`../store/DATA_SAFETY.md`](../store/DATA_SAFETY.md)
 
-Özet: uygulamanın kendisi veri toplamıyor; toplanan her şey AdMob reklam
+Özet: uygulamanın kendisi veri toplamıyor; toplanan her şey Unity Ads reklam
 SDK'sından geliyor ve reklamcılık amacıyla Google ile paylaşılıyor.
 
 ## Gizlilik politikası
@@ -64,7 +64,7 @@ Bu adres Play Console'da gizlilik politikası alanına girilecek.
 
 ## Hesaplar
 
-Hangi Google hesabının Play Console ve AdMob'u sahiplendiği **Traffic Escape
+Hangi Google hesabının Play Console ve Unity Ads'u sahiplendiği **Traffic Escape
 deposundaki** `docs/ACCOUNTS.md` dosyasında — o dosya depoya girmiyor.
 Dört oyun aynı hesapları kullanıyor, bilgi tek yerde duruyor.
 
@@ -78,12 +78,12 @@ e-postası `bluelabsgames@gmail.com`.
 - [x] Açılış ekranı oyunun koyu paletiyle uyumlu (beyaz sıçrama yok)
 - [x] R8 (kod küçültme) ve kaynak temizliği açık
 - [x] 16 KB sayfa hizalaması — Android 15 zorunluluğu, yerel kütüphaneler uyumlu
-- [x] İzinler yalnızca AdMob'un gerektirdikleri; fazladan izin yok
+- [x] İzinler yalnızca Unity Ads'un gerektirdikleri; fazladan izin yok
 - [x] İmzalama ortak anahtarla (`~/.android-keystores/bluelabsgames.jks`, takma ad bu oyuna özel)
-- [x] AdMob kimlikleri kaynak kodda değil; hata ayıklamada her zaman test kimliği
+- [x] Unity Ads kimlikleri kaynak kodda değil; hata ayıklamada her zaman test kimliği
 - [x] Gizlilik politikası sayfası hazır
 - [x] Mağaza ikonu, öne çıkan görsel ve ekran görüntüleri hazır
 - [ ] GitHub Pages açıldı ve politika adresi Play Console'a girildi
 - [ ] Play Console'da uygulama oluşturuldu
 - [ ] `tool/build_release.sh` ile imzalı AAB üretilip yüklendi
-- [ ] AdMob'da uygulama Play kaydına bağlandı
+- [ ] Unity Ads'da uygulama Play kaydına bağlandı

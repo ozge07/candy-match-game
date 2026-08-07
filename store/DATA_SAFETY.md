@@ -5,8 +5,8 @@ bu tabloyu kullan.
 
 ## Özet
 
-Uygulamanın kendisi **hiçbir veri toplamıyor**. Toplanan her şey Google AdMob
-reklam SDK'sından geliyor. Google, AdMob'u kullanan geliştiricinin bu verileri
+Uygulamanın kendisi **hiçbir veri toplamıyor**. Toplanan her şey Unity Ads
+reklam SDK'sından geliyor. Google, Unity Ads'u kullanan geliştiricinin bu verileri
 "toplanıyor" olarak beyan etmesini istiyor.
 
 ## Form cevapları
@@ -14,7 +14,7 @@ reklam SDK'sından geliyor. Google, AdMob'u kullanan geliştiricinin bu verileri
 **Uygulamanız kullanıcı verisi topluyor veya paylaşıyor mu?** → **Evet**
 (reklam SDK'sı nedeniyle)
 
-**Verileriniz aktarım sırasında şifreleniyor mu?** → **Evet** (AdMob HTTPS
+**Verileriniz aktarım sırasında şifreleniyor mu?** → **Evet** (Unity Ads HTTPS
 kullanıyor)
 
 **Kullanıcılar verilerinin silinmesini isteyebiliyor mu?** → **Hayır**
@@ -29,7 +29,7 @@ sıfırlanabiliyor)
 | Uygulama etkinliği | Uygulama içi etkileşimler | Evet | Evet | Reklamcılık, analiz | İsteğe bağlı |
 | Cihaz veya diğer kimlikler | Cihaz/diğer kimlikler (reklam kimliği) | Evet | Evet | Reklamcılık | İsteğe bağlı |
 
-"Paylaşılıyor" evet, çünkü veri üçüncü tarafa (Google) gidiyor.
+"Paylaşılıyor" evet, çünkü veri üçüncü tarafa (Unity Technologies) gidiyor.
 
 ### Toplanmayanlar
 

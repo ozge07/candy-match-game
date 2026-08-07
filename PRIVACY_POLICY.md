@@ -10,8 +10,8 @@ Oyunun kendisi sizden hiçbir bilgi istemez ve hiçbir bilgi toplamaz. Hesap
 açmanız gerekmez, isim ya da e-posta sorulmaz, analiz (analytics) aracı
 kullanılmaz.
 
-Oyunda **isteğe bağlı ödüllü reklamlar** vardır. Reklamları Google AdMob
-gösterir ve AdMob kendi verilerini toplar; aşağıdaki bölüm bunu açıklar.
+Oyunda **isteğe bağlı ödüllü reklamlar** vardır. Reklamları Unity Ads
+gösterir ve Unity Ads kendi verilerini toplar; aşağıdaki bölüm bunu açıklar.
 Reklam izlemediğiniz sürece oyun oynanırken veri gönderilmez.
 
 ## Toplanan veriler
@@ -54,6 +54,7 @@ Uygulamanın istediği izinlerin tamamı reklam SDK'sından gelir:
 | `INTERNET`, `ACCESS_NETWORK_STATE` | Reklamı indirmek ve bağlantıyı kontrol etmek |
 | `AD_ID`, `ACCESS_ADSERVICES_*` | Reklam kimliği ve Android'in reklam ölçüm API'leri |
 | `WAKE_LOCK`, `FOREGROUND_SERVICE` | Reklam videosu oynarken ekranın kapanmaması |
+| `RECEIVE_BOOT_COMPLETED` | Reklam SDK'sının yarım kalan işini cihaz yeniden başladıktan sonra tamamlaması |
 
 Oyunun kendisi hiçbir izin istemez: kameraya, mikrofona, rehbere, konuma ya da
 dosyalarınıza erişmez.

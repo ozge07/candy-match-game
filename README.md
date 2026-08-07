@@ -243,28 +243,26 @@ geçmek için:
 ## Reklamlar
 
 Hamle kalmadığında oyun sonu kartında **Devam Et** çıkıyor: ödüllü reklamı
-sonuna kadar izleyen oyuncunun tahtası karıştırılıp oyun kaldığı yerden
-sürüyor. Şekerler silinmiyor, yalnızca türleri yeniden dağıtılıyor — biriken
-özel şekerler duruyor. Tur başına bir kez.
+izleyen oyuncunun tahtası karıştırılıp oyun kaldığı yerden sürüyor. Şekerler
+silinmiyor, yalnızca türleri yeniden dağıtılıyor — biriken özel şekerler
+duruyor. Tur başına bir kez.
 
-**Depoda hiçbir gerçek AdMob kimliği yok**; kaynakta yalnızca Google'ın test
-birimleri var. Gerçek değerleri koymak için:
+**Geliştirirken reklam tamamen kapalı.** Yayın (release) dışı hiçbir
+derlemede reklam SDK'sı başlatılmıyor, ağa tek bir istek bile gitmiyor, test
+reklamı dahi açılmıyor. Kod düzeyinde kilit: üç ayrı noktada `kReleaseMode`
+kontrolü var ve `test/ads_controller_test.dart` bunları koruyor.
 
-| Kimlik | Nereden | Şablon |
-|---|---|---|
-| Uygulama kimliği (`~`) | `android/admob.properties` | `admob.properties.example` |
-| Ödüllü birim (`/`) | derlemedeki `--dart-define=ADMOB_REWARDED_ANDROID=…` | `tool/build_release.example.sh` |
+Sebep somut: daha önce kullanılan AdMob hesabı geçersiz trafik nedeniyle
+kapatıldı. İkinci bir reddedilmeyi imkânsız kılmanın tek kesin yolu,
+geliştirme derlemesinin reklam ağıyla hiç konuşmaması.
 
-`flutter run` ile geliştirirken **her zaman** test reklamı çıkıyor; gerçek
-kimlik verilmiş olsa bile. Kendi gerçek reklamına tıklamak geçersiz trafik
-sayılır ve AdMob hesabının kapatılmasına yol açar.
+Sağlayıcı bağlı değilken ödül **doğrudan veriliyor**; özellik geliştirirken
+de çalışıyor.
 
-Yayın paketi gerçek kimliklerle:
-
-```bash
-./tool/build_release.sh          # app bundle
-./tool/build_release.sh apk      # apk
-```
+Reklam ağı Unity Ads. Oyun hangi ağın kullanıldığını bilmiyor — yalnızca
+`RewardedAdProvider` arayüzünü çağırıyor. Kimlik kaynak koda yazılmıyor,
+yayın derlemesinde `--dart-define` ile geçiliyor (`tool/build_release.sh`,
+`.gitignore`'da).
 
 ## Depoda olmayanlar
 
@@ -276,7 +274,7 @@ Aşağıdaki dosyalar `.gitignore` ile hariç tutuldu:
 - `test/bomb_test.dart`, `test/rainbow_swap_test.dart`, `test/hint_test.dart` —
   yukarıdaki kuralların testleri
 
-Ayrıca gerçek AdMob kimlikleri (`android/admob.properties`,
+Ayrıca gerçek Unity Ads kimliği (
 `tool/build_release.sh`) ve yayın anahtarı (`android/key.properties`) da
 depoya girmiyor.
 
