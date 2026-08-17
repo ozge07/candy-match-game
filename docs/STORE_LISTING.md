@@ -50,17 +50,23 @@ kullanılabilir — Play dile özel görüntü zorunlu tutmuyor.
 Ayrıntılı yanıtlar: [`../store/DATA_SAFETY.md`](../store/DATA_SAFETY.md)
 
 Özet: uygulamanın kendisi veri toplamıyor; toplanan her şey Unity Ads reklam
-SDK'sından geliyor ve reklamcılık amacıyla Google ile paylaşılıyor.
+SDK'sından geliyor ve reklamcılık amacıyla **Unity Technologies** ile
+paylaşılıyor.
+
+Kapalı testte de aynı form geçerli — test reklamı SDK'yı yine başlatıyor,
+beyan değişmiyor. Ayrıntı DATA_SAFETY.md'de.
 
 ## Gizlilik politikası
 
-Sayfa: `docs/privacy-policy.html` (Türkçe + İngilizce, tek dosya).
+İki ayrı sayfa: `docs/privacy-policy.html` (Türkçe),
+`docs/privacy-policy-en.html` (İngilizce). Sayfalar birbirine bağlı.
 
-Yayınlamak için **Settings → Pages → Source: main / docs**. Adres:
+GitHub Pages açık (**main / docs**, durum: built, HTTPS zorunlu). Adresler:
 
     https://ozge07.github.io/candy-match-game/privacy-policy.html
+    https://ozge07.github.io/candy-match-game/privacy-policy-en.html
 
-Bu adres Play Console'da gizlilik politikası alanına girilecek.
+Play Console'da kaydın diline göre ilgili adres girilecek.
 
 ## Hesaplar
 
@@ -81,9 +87,14 @@ e-postası `bluelabsgames@gmail.com`.
 - [x] İzinler yalnızca Unity Ads'un gerektirdikleri; fazladan izin yok
 - [x] İmzalama ortak anahtarla (`~/.android-keystores/bluelabsgames.jks`, takma ad bu oyuna özel)
 - [x] Unity Ads kimlikleri kaynak kodda değil; hata ayıklamada her zaman test kimliği
-- [x] Gizlilik politikası sayfası hazır
+- [x] Gizlilik politikası sayfası hazır (Türkçe + İngilizce)
 - [x] Mağaza ikonu, öne çıkan görsel ve ekran görüntüleri hazır
-- [ ] GitHub Pages açıldı ve politika adresi Play Console'a girildi
+- [x] GitHub Pages açıldı, iki politika adresi de canlı (HTTP 200)
+- [ ] Politika adresi Play Console'a girildi
+- [ ] "Hedef kitle ve içerik" bölümünde yaş aralığı **13+** seçildi
+      (reklam kimliği topluyoruz; çocuklara yönelik beyan edilirse Families
+      politikası ihlal olur)
 - [ ] Play Console'da uygulama oluşturuldu
-- [ ] `tool/build_release.sh` ile imzalı AAB üretilip yüklendi
+- [ ] Kapalı test: `tool/build_qa.sh appbundle` ile TEST reklamlı AAB yüklendi
+- [ ] Üretim: `tool/build_release.sh` ile GERÇEK reklamlı imzalı AAB yüklendi
 - [ ] Unity Ads'da uygulama Play kaydına bağlandı

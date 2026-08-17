@@ -21,31 +21,53 @@
   table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 15px; }
   th, td { border: 1px solid #e0e4e8; padding: 8px 10px; text-align: left; }
   th { background: #f6f8fa; }
+  .dil { font-size: 15px; margin: 0 0 26px; }
+  .kunye { color: #555; }
   @media (prefers-color-scheme: dark) {
     body { color: #e2e6ea; background: #1C1836; }
     a { color: #F5A623; }
     code { background: rgba(255,255,255,.08); }
     th, td { border-color: rgba(255,255,255,.14); }
     th { background: rgba(255,255,255,.06); }
+    .kunye { color: #a8b0b8; }
   }
 </style>
 </head>
 <body>
 <h1>Candy Match — Gizlilik Politikası</h1>
-<p><strong>Son güncelleme:</strong> 5 Ağustos 2026 <strong>Geliştirici:</strong> Blue Labs Games <strong>İletişim:</strong> bluelabsgames@gmail.com</p>
+<p class="dil">Türkçe · <a href="privacy-policy-en.html">English</a></p>
+<p class="kunye"><strong>Son güncelleme:</strong> 17 Ağustos 2026<br>
+<strong>Geliştirici:</strong> Blue Labs Games<br>
+<strong>İletişim:</strong> <a href="mailto:bluelabsgames@gmail.com">bluelabsgames@gmail.com</a></p>
+
 <h2>Özet</h2>
-<p>Oyunun kendisi sizden hiçbir bilgi istemez ve hiçbir bilgi toplamaz. Hesap açmanız gerekmez, isim ya da e-posta sorulmaz, analiz (analytics) aracı kullanılmaz.</p>
-<p>Oyunda <strong>isteğe bağlı ödüllü reklamlar</strong> vardır. Reklamları Unity Ads gösterir ve Unity Ads kendi verilerini toplar; aşağıdaki bölüm bunu açıklar. Reklam izlemediğiniz sürece oyun oynanırken veri gönderilmez.</p>
-<h2>Toplanan veriler</h2>
-<p><strong>Hiçbiri.</strong> Uygulama şunları toplamaz:</p>
+<p>Oyunun kendisi sizden hiçbir bilgi istemez. Hesap açmanız gerekmez, isim ya da e-posta sorulmaz, oyunun kendi analiz (analytics) aracı yoktur.</p>
+<p>Oyunda <strong>isteğe bağlı ödüllü reklamlar</strong> vardır. Reklamları Unity Ads gösterir ve Unity Ads reklam kimliğinizi, yaklaşık konumunuzu ve cihazınıza dair teknik bilgileri toplar. Unity Ads yazılımı <strong>oyun açıldığında başlatıldığı için</strong> bu bilgiler siz hiç reklam izlemeseniz de toplanır. Ayrıntısı aşağıda.</p>
+
+<h2>Oyunun kendisi neleri toplamaz</h2>
+<p>Uygulamanın kendi kodu şunların hiçbirini toplamaz, istemez, göndermez:</p>
 <ul>
 <li>Ad, e-posta, telefon numarası veya başka kimlik bilgisi</li>
-<li>Konum bilgisi</li>
-<li>Kişiler, fotoğraflar, dosyalar, takvim veya mikrofon/kamera verisi</li>
-<li>Cihaz kimliği, reklam kimliği (advertising ID) veya benzeri tanımlayıcılar</li>
-<li>Kullanım/analiz verisi, çökme raporu</li>
+<li>GPS konumu ya da konum izni</li>
+<li>Kişiler, fotoğraflar, dosyalar, takvim, mikrofon veya kamera verisi</li>
 <li>Ödeme veya finansal bilgi</li>
+<li>Oyun içi analiz verisi ya da çökme raporu</li>
 </ul>
+
+<h2>Reklam yazılımının topladıkları</h2>
+<p>Reklamları <strong>Unity Ads</strong> (Unity Technologies) gösterir. Toplanan veriler Unity'ye gider ve reklamcılık amacıyla kullanılır:</p>
+<div class="tablo"><table><thead><tr>
+<th>Toplanan</th>
+<th>Ne için</th>
+</tr></thead><tbody>
+<tr><td>Reklam kimliği (Advertising ID)</td><td>Reklam seçmek, aynı reklamı tekrar tekrar göstermemek, sahtekârlığı önlemek</td></tr>
+<tr><td>Yaklaşık konum (IP adresinden, ülke/bölge düzeyinde)</td><td>Bölgenize uygun reklam göstermek</td></tr>
+<tr><td>Uygulama içi etkileşimler (reklam gösterildi, izlendi, atlandı)</td><td>Reklam ölçümü ve raporlama</td></tr>
+<tr><td>Cihaz teknik bilgileri (model, işletim sistemi sürümü, dil, ağ türü)</td><td>Cihazla uyumlu reklam göstermek</td></tr>
+</tbody></table></div>
+<p>Bunların hiçbirini Blue Labs Games görmez ya da saklamaz; veri doğrudan Unity'ye gider. Unity'nin kendi politikası: <a href="https://unity.com/legal/game-player-and-app-user-privacy-policy">unity.com/legal/game-player-and-app-user-privacy-policy</a></p>
+<p><strong>Reklam kimliğini sıfırlayabilir ya da silebilirsiniz:</strong> Android'de Ayarlar → Google → Tüm hizmetler → Reklamlar. Sildiğinizde uygulamalar artık bu kimliğe erişemez.</p>
+
 <h2>Cihazınızda saklanan bilgiler</h2>
 <p>Oyunun ilerlemesini hatırlayabilmesi için <strong>yalnızca cihazınızın kendi belleğinde</strong> üç bilgi tutulur:</p>
 <div class="tablo"><table><thead><tr>
@@ -60,31 +82,40 @@
 <ul>
 <li>Uygulamanın kendi özel alanında (Android <code>SharedPreferences</code>) tutulur,</li>
 <li><strong>Hiçbir sunucuya gönderilmez</strong>, başka uygulamalarla paylaşılmaz,</li>
-<li>Uygulamayı kaldırdığınızda ya da Ayarlar → Uygulamalar → Candy Match →</li>
+<li>Uygulamayı kaldırdığınızda ya da Ayarlar → Uygulamalar → Candy Match → Depolama → Verileri temizle dediğinizde tamamen silinir.</li>
 </ul>
-<p>Depolama → Verileri temizle dediğinizde tamamen silinir.</p>
 <p>Bunlar kişisel veri değildir ve sizi tanımlamaz.</p>
+
 <h2>İzinler</h2>
-<p>Uygulamanın istediği izinlerin tamamı reklam SDK&#x27;sından gelir:</p>
+<p>Uygulamanın istediği izinlerin tamamı reklam yazılımından gelir:</p>
 <div class="tablo"><table><thead><tr>
 <th>İzin</th>
 <th>Ne için</th>
 </tr></thead><tbody>
 <tr><td><code>INTERNET</code>, <code>ACCESS_NETWORK_STATE</code></td><td>Reklamı indirmek ve bağlantıyı kontrol etmek</td></tr>
-<tr><td><code>AD_ID</code>, <code>ACCESS_ADSERVICES_*</code></td><td>Reklam kimliği ve Android&#x27;in reklam ölçüm API&#x27;leri</td></tr>
+<tr><td><code>AD_ID</code></td><td>Reklam kimliğini okumak</td></tr>
+<tr><td><code>ACCESS_ADSERVICES_ATTRIBUTION</code>, <code>ACCESS_ADSERVICES_TOPICS</code></td><td>Android'in reklam ölçüm API'leri</td></tr>
 <tr><td><code>WAKE_LOCK</code>, <code>FOREGROUND_SERVICE</code></td><td>Reklam videosu oynarken ekranın kapanmaması</td></tr>
-<tr><td><code>RECEIVE_BOOT_COMPLETED</code></td><td>Reklam SDK&#x27;sının yarım kalan işini cihaz yeniden başladıktan sonra tamamlaması</td></tr>
+<tr><td><code>RECEIVE_BOOT_COMPLETED</code></td><td>Reklam yazılımının yarım kalan işini cihaz yeniden başladıktan sonra tamamlaması</td></tr>
 </tbody></table></div>
 <p>Oyunun kendisi hiçbir izin istemez: kameraya, mikrofona, rehbere, konuma ya da dosyalarınıza erişmez.</p>
+
 <h2>Analiz</h2>
-<p>Uygulamada analiz (analytics) aracı ya da takip teknolojisi yoktur. Üçüncü taraflarla tek veri paylaşımı yukarıda anlatılan reklam SDK&#x27;sı üzerindendir.</p>
+<p>Uygulamada bizim koyduğumuz bir analiz aracı ya da takip teknolojisi yoktur. Üçüncü taraflarla tek veri paylaşımı yukarıda anlatılan reklam yazılımı üzerindendir.</p>
+
 <h2>Üçüncü taraf bileşenler</h2>
-<p>Oyun açık kaynaklı Flutter ve Flame kütüphaneleriyle geliştirilmiştir. Ses efektleri sıfırdan sentezlenmiştir; dışarıdan indirilen içerik kullanılmaz. Kullanılan kütüphanelerin hiçbiri veri toplamaz.</p>
+<p>Oyun açık kaynaklı Flutter ve Flame kütüphaneleriyle geliştirilmiştir. Ses efektleri sıfırdan sentezlenmiştir; dışarıdan indirilen içerik kullanılmaz. Reklam yazılımı dışında veri toplayan bir bileşen yoktur.</p>
+
 <h2>Çocukların gizliliği</h2>
-<p>Uygulama hiç kimseden, çocuklar dahil, veri toplamaz. 13 yaş altı kullanıcılardan bilerek veri toplanmaz çünkü hiçbir kullanıcıdan veri toplanmaz.</p>
+<p>Uygulama 13 yaş altı kullanıcılara yönelik değildir ve bilerek onlardan veri toplamaz. Reklam yazılımı reklam kimliği topladığı için oyunu çocuklara yönelik olarak sunmuyoruz. Çocuğunuzun bu oyunu kullandığını düşünüyorsanız yukarıdaki adresten bize yazın.</p>
+
+<h2>Verilerinizle ilgili haklarınız</h2>
+<p>Uygulama sizi tanımlayan bir veri saklamadığı için silinmesini isteyeceğiniz bir hesap ya da kayıt yoktur. Cihazınızda tutulan oyun ilerlemesini uygulamayı kaldırarak silebilirsiniz. Reklam kimliğinizi yukarıda anlatıldığı gibi Android ayarlarından sıfırlayabilir ya da silebilirsiniz.</p>
+
 <h2>Bu politikadaki değişiklikler</h2>
 <p>Politika değişirse bu sayfa güncellenir ve yukarıdaki &quot;Son güncelleme&quot; tarihi değiştirilir.</p>
+
 <h2>İletişim</h2>
-<p>Sorularınız için: <strong>bluelabsgames@gmail.com</strong></p>
+<p>Sorularınız için: <strong><a href="mailto:bluelabsgames@gmail.com">bluelabsgames@gmail.com</a></strong></p>
 </body>
 </html>
