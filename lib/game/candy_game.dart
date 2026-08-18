@@ -45,10 +45,10 @@ class CandyGame extends FlameGame {
   static const double _boardMargin = 14;
 
   /// HUD'a ayrılan üst şerit (dünya birimi).
-  static const double _hudSpace = 215;
+  static const double hudSpace = 215;
 
   /// Seviye çubuğuna ayrılan alt şerit (dünya birimi).
-  static const double _levelBarSpace = 150;
+  static const double levelBarSpace = 150;
 
   /// Kaç puanda bir seviye atlanıyor.
   static const int pointsPerLevel = 2000;
@@ -134,17 +134,35 @@ class CandyGame extends FlameGame {
     _addBoard();
   }
 
-  double get _cellSize => (gameWidth - _boardMargin * 2) / cols;
+  /// HUD ile seviye çubuğu arasında tahtaya kalan yükseklik.
+  double get _availableHeight => worldHeight - hudSpace - levelBarSpace;
+
+  /// Hücre boyu iki sınırın küçüğü: ekran genişliği ve tahtaya kalan
+  /// yükseklik.
+  ///
+  /// Yalnızca genişliğe bakılırsa 11 satır, tahta genişliğinin ~1,375 katı
+  /// yükseklik ister. Telefon oranında (1:2.22) bu sığıyor, ama tablet
+  /// oranında (1:1.6) sığmıyordu: tahta HUD'un ve seviye çubuğunun altına
+  /// taşıyordu.
+  double get _cellSize => min(
+    (gameWidth - _boardMargin * 2) / cols,
+    _availableHeight / rows,
+  );
 
   @visibleForTesting
   double get debugCellSize => _cellSize;
 
   /// Tahtayı HUD ile seviye çubuğu arasındaki alanın ortasına yerleştirir.
+  ///
+  /// Yatayda da ortalıyor: yükseklik sınırlayıcı olduğunda tahta ekran
+  /// eninden dar kalıyor, kenar boşluğuna yaslanırsa yamuk duruyor.
   void _layoutBoard() {
-    final boardHeight = _cellSize * rows;
-    final available = worldHeight - _hudSpace - _levelBarSpace;
-    _boardTop = _hudSpace + (available - boardHeight) / 2;
-    _board?.position.setValues(_boardMargin, _boardTop);
+    final board = _board;
+    if (board == null) {
+      return;
+    }
+    _boardTop = hudSpace + (_availableHeight - board.size.y) / 2;
+    board.position.setValues((gameWidth - board.size.x) / 2, _boardTop);
   }
 
   void _addBoard() {

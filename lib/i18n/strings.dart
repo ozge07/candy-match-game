@@ -41,6 +41,7 @@ class Strings {
   String get soundOff => _pick('Sesi kapat', 'Turn sound off');
   String moves(int count) => _pick('$count hamle', '$count moves');
   String get bestScore => _pick('en iyi skor', 'best score');
+  String get leadingNow => _pick('lider sensin', "you're leading");
 
   // --- Seviye ---
   String level(int value) => _pick('SEVİYE $value', 'LEVEL $value');

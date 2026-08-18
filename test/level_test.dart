@@ -11,7 +11,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:candy_match/i18n/app_language.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<CandyGame> pumpGame(WidgetTester tester) async {
+/// [ekran] verilirse test yüzeyi o piksel boyutuna ayarlanıyor. Yerleşim
+/// testleri buna muhtaç: varsayılan 800x600 yüzey hiçbir telefona ya da
+/// tablete benzemiyor.
+Future<CandyGame> pumpGame(WidgetTester tester, {Size? ekran}) async {
+  if (ekran != null) {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = ekran;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+  }
   await tester.pumpWidget(
     MaterialApp(home: GamePage(
         ads: AdsController.disabled(),audio: AudioController())),
@@ -129,14 +138,46 @@ void main() {
   });
 
   group('yerleşim', () {
-    testWidgets('tahta ekran genişliğini neredeyse tamamen kaplar', (
+    testWidgets('telefon oranında tahta ekran genişliğini neredeyse kaplar', (
       tester,
     ) async {
-      final game = await pumpGame(tester);
+      // Telefon oranı (1:2.22): yükseklik bol, sınırlayan şey genişlik.
+      final game = await pumpGame(tester, ekran: const Size(1080, 2400));
 
-      // Dünya sabit genişlikte; tahta kenar boşlukları dışında her yeri kaplar.
       final boardWidth = CandyGame.cols * game.debugCellSize;
       expect(boardWidth / CandyGame.gameWidth, greaterThan(0.95));
+    });
+
+    testWidgets('tablet oranında tahta HUD ile seviye çubuğuna taşmaz', (
+      tester,
+    ) async {
+      // Tablet oranı (1:1.6) telefondan belirgin şekilde kısa. Hücre boyu
+      // yalnızca genişlikten hesaplanırsa tahta buraya sığmıyor ve HUD'un
+      // altına taşıyor.
+      final game = await pumpGame(tester, ekran: const Size(1200, 1920));
+      final board = game.world.children.whereType<BoardComponent>().first;
+
+      expect(
+        board.position.y,
+        greaterThanOrEqualTo(CandyGame.hudSpace),
+        reason: 'tahtanın üstü HUD şeridine giriyor',
+      );
+      expect(
+        board.position.y + board.size.y,
+        lessThanOrEqualTo(game.worldHeight - CandyGame.levelBarSpace),
+        reason: 'tahtanın altı seviye çubuğuna giriyor',
+      );
+    });
+
+    testWidgets('yükseklik sınırlayınca tahta yatayda ortalanıyor', (
+      tester,
+    ) async {
+      final game = await pumpGame(tester, ekran: const Size(1200, 1920));
+      final board = game.world.children.whereType<BoardComponent>().first;
+
+      // Dar kalan tahta kenara yaslanmamalı; iki yandaki boşluk eşit olmalı.
+      final sagBosluk = CandyGame.gameWidth - (board.position.x + board.size.x);
+      expect(board.position.x, closeTo(sagBosluk, 0.01));
     });
 
     testWidgets('dünya yüksekliği ekran oranına uyar', (tester) async {

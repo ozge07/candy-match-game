@@ -148,7 +148,7 @@ class _BestCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  leading ? 'lider sensin' : metin.bestScore,
+                  leading ? metin.leadingNow : metin.bestScore,
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.45),
                     fontSize: 11,
